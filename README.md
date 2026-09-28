@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="media/news_alpha_logo.png" alt="News Alpha Portfolio Agent" width="70%"/>
+<img src="assets/news_alpha_logo.png" alt="News Alpha Portfolio Agent" width="70%"/>
 
 
 ### From real-world news to testable multi-asset research
@@ -24,7 +24,7 @@ A quantitative research platform that turns market news and events into economic
 ## The Research Pipeline
 
 <p align="center">
-  <img src="media/news_alpha_overview.png" alt="News Alpha Portfolio Agent overview" width="100%"/>
+  <img src="assets/news_alpha_overview.png" alt="News Alpha Portfolio Agent overview" width="100%"/>
 </p>
 
 
@@ -189,7 +189,7 @@ See [Data and Point-in-Time Integrity](docs/DATA_AND_PIT.md).
 ## Architecture
 
 <p align="center">
-  <img src="media/system_architecture.png" alt="News Alpha Portfolio Agent system architecture" width="96%"/>
+  <img src="assets/system_architecture.png" alt="News Alpha Portfolio Agent system architecture" width="96%"/>
 </p>
 
 For implementation boundaries and ownership, see [Architecture](docs/ARCHITECTURE.md).
@@ -359,7 +359,7 @@ See [LICENSE](LICENSE).
 
 
 <p align="center">
-  <img src="media/news_alpha_closing_banner.png"
+  <img src="assets/news_alpha_closing_banner.png"
        alt="News Alpha Portfolio Agent research philosophy"
        width="100%"/>
 </p>
