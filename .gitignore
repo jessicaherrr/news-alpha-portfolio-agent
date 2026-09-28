@@ -1,0 +1,147 @@
+# ============================================================
+# Python environments and local configuration
+# ============================================================
+
+.venv/
+venv/
+.env
+.env.local
+.streamlit/secrets.toml
+
+
+# ============================================================
+# Python caches and build artifacts
+# ============================================================
+
+__pycache__/
+*.py[cod]
+*.pyo
+
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+build/
+dist/
+*.egg-info/
+
+
+# ============================================================
+# Test and coverage artifacts
+# ============================================================
+
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+
+# ============================================================
+# Generated research outputs
+# ============================================================
+
+outputs/
+results/
+reports/
+
+
+# ============================================================
+# Local data and caches
+# ============================================================
+
+data/raw/
+data/processed/
+data/staging/
+data/cache/
+
+data/user_prefs/
+data/discovery/
+data/holdout_lifecycle/
+data/news_alpha/
+
+
+# ============================================================
+# Operational SQLite stores
+# ============================================================
+
+data/registry/*.sqlite
+data/registry/*.sqlite-journal
+data/registry/*.sqlite-wal
+
+data/paper_trading/*.sqlite
+data/paper_trading/*.sqlite-journal
+data/paper_trading/*.sqlite-wal
+
+data/crypto_synthetic/*.sqlite
+data/crypto_synthetic/*.sqlite-journal
+data/crypto_synthetic/*.sqlite-wal
+
+data/community/*.sqlite
+data/community/*.sqlite-journal
+data/community/*.sqlite-wal
+
+data/sessions/*.sqlite
+data/sessions/*.sqlite-journal
+data/sessions/*.sqlite-wal
+
+data/knowledge_cache/*.sqlite
+data/knowledge_cache/*.sqlite-journal
+data/knowledge_cache/*.sqlite-wal
+
+data/market_intelligence/*.sqlite
+data/market_intelligence/**/*.sqlite
+data/market_intelligence/**/*.sqlite-journal
+data/market_intelligence/**/*.sqlite-wal
+
+
+# ============================================================
+# Local agent and development tooling
+# ============================================================
+
+.agents/
+.claude/
+
+*.verify.py
+/tmp_verify/
+
+
+# ============================================================
+# IDE and editor files
+# ============================================================
+
+.idea/
+.vscode/
+
+*.swp
+*.swo
+
+
+# ============================================================
+# macOS
+# ============================================================
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+
+# ============================================================
+# R / RStudio
+# ============================================================
+
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+
+
+# ============================================================
+# Logs and temporary files
+# ============================================================
+
+*.log
+*.tmp
+*.temp
+
+tmp/
+temp/

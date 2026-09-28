@@ -1,0 +1,74 @@
+# Product-aware CME session calendars (Phase 04).
+#
+# Times are exchange-LOCAL wall-clock; UTC timestamps are always preserved
+# separately (trading_day / session are derived labels, never a rewrite).
+# DST is handled by zoneinfo on the timezone below.
+#
+# RTH windows are documented MVP approximations of the pit/primary session and
+# should be tightened against the exchange spec in a later phase. The
+# ARCHITECTURE (per-product config, holidays, early closes) is what Phase 04
+# fixes; a full historical CME holiday database is not required yet.
+version: "2026-09-phase04"
+
+calendars:
+  cme_equity_index:            # ES, NQ -- CME Globex equity index
+    timezone: America/Chicago
+    trading_day_boundary_local: "17:00"
+    sessions:
+      - {session: ETH,         start: "17:00", end: "24:00"}
+      - {session: ETH,         start: "00:00", end: "08:30"}
+      - {session: RTH,         start: "08:30", end: "15:00"}
+      - {session: ETH,         start: "15:00", end: "16:00"}
+      - {session: MAINTENANCE, start: "16:00", end: "17:00"}
+    weekly_closed: {from: {weekday: friday, time: "16:00"}, to: {weekday: sunday, time: "17:00"}}
+    holidays: []               # ISO dates -> CLOSED all day
+    early_closes: {}           # {ISO date: "12:00"} -> CLOSED from that local time
+
+  nymex_energy:                # CL -- NYMEX energy
+    timezone: America/Chicago
+    trading_day_boundary_local: "17:00"
+    sessions:
+      - {session: ETH,         start: "17:00", end: "24:00"}
+      - {session: ETH,         start: "00:00", end: "08:00"}
+      - {session: RTH,         start: "08:00", end: "13:30"}
+      - {session: ETH,         start: "13:30", end: "16:00"}
+      - {session: MAINTENANCE, start: "16:00", end: "17:00"}
+    weekly_closed: {from: {weekday: friday, time: "16:00"}, to: {weekday: sunday, time: "17:00"}}
+    holidays: []
+    early_closes: {}
+
+  comex_metals:                # GC -- COMEX metals
+    timezone: America/Chicago
+    trading_day_boundary_local: "17:00"
+    sessions:
+      - {session: ETH,         start: "17:00", end: "24:00"}
+      - {session: ETH,         start: "00:00", end: "07:20"}
+      - {session: RTH,         start: "07:20", end: "12:30"}
+      - {session: ETH,         start: "12:30", end: "16:00"}
+      - {session: MAINTENANCE, start: "16:00", end: "17:00"}
+    weekly_closed: {from: {weekday: friday, time: "16:00"}, to: {weekday: sunday, time: "17:00"}}
+    holidays: []
+    early_closes: {}
+
+  cbot_rates:                  # ZN -- CBOT interest rates
+    timezone: America/Chicago
+    trading_day_boundary_local: "17:00"
+    sessions:
+      - {session: ETH,         start: "17:00", end: "24:00"}
+      - {session: ETH,         start: "00:00", end: "07:20"}
+      - {session: RTH,         start: "07:20", end: "14:00"}
+      - {session: ETH,         start: "14:00", end: "16:00"}
+      - {session: MAINTENANCE, start: "16:00", end: "17:00"}
+    weekly_closed: {from: {weekday: friday, time: "16:00"}, to: {weekday: sunday, time: "17:00"}}
+    holidays: []
+    early_closes: {}
+
+roots:
+  ES: cme_equity_index
+  NQ: cme_equity_index
+  CL: nymex_energy
+  GC: comex_metals
+  ZN: cbot_rates
+  ZB: cbot_rates
+  ZF: cbot_rates
+  ZT: cbot_rates

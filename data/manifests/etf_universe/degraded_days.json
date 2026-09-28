@@ -1,0 +1,42 @@
+{
+  "schema": "phase6-etf-degraded-days/1",
+  "source": "Databento metadata.get_dataset_condition, safe historical windows only (never derived from datetime.now())",
+  "note": "Preserved per instruction: do not silently drop degraded days. A degraded day is NOT removed from any acquired raw artifact -- this file records which calendar days Databento itself flags as reduced-quality per dataset, for classification against a chosen candidate signal/execution schedule once one exists (Phase 6 instruction 10). Union across datasets includes several dates flagged independently by unrelated feeds (2018-11-19, 2020-06-12/2021-01-21, 2023-12-04/2023-12-11, 2024-06-18, 2024-11-19), suggesting real cross-market data-quality events on those specific dates rather than single-dataset artifacts.",
+  "windows_checked": {
+    "ARCX.PILLAR": ["2018-05-01", "2024-12-31"],
+    "XNAS.ITCH": ["2018-05-01", "2024-12-31"],
+    "XNYS.PILLAR": ["2018-05-01", "2024-12-31"],
+    "DBEQ.BASIC": ["2023-03-28", "2024-12-31"],
+    "EQUS.SUMMARY": ["2024-07-01", "2024-12-31"]
+  },
+  "degraded_days": {
+    "ARCX.PILLAR": [
+      "2018-05-18", "2018-09-24", "2018-11-19", "2020-04-06", "2020-07-17",
+      "2020-08-12", "2021-01-21", "2022-07-18", "2022-08-22", "2022-12-05",
+      "2022-12-27", "2023-06-26", "2023-09-22", "2023-11-21", "2023-12-01",
+      "2023-12-04", "2023-12-05", "2023-12-06", "2023-12-07", "2023-12-08",
+      "2023-12-11", "2024-04-19", "2024-06-18", "2024-11-19"
+    ],
+    "XNAS.ITCH": ["2021-07-07", "2021-10-26", "2022-09-19"],
+    "XNYS.PILLAR": [
+      "2018-11-19", "2020-06-12", "2021-01-21", "2023-01-24", "2023-12-04",
+      "2023-12-11", "2024-08-08"
+    ],
+    "DBEQ.BASIC": ["2023-12-04", "2023-12-11", "2024-05-28", "2024-06-18", "2024-11-19"],
+    "EQUS.SUMMARY": []
+  },
+  "union_of_all_degraded_dates": [
+    "2018-05-18", "2018-09-24", "2018-11-19", "2020-04-06", "2020-06-12",
+    "2020-07-17", "2020-08-12", "2021-01-21", "2021-07-07", "2021-10-26",
+    "2022-07-18", "2022-08-22", "2022-09-19", "2022-12-05", "2022-12-27",
+    "2023-01-24", "2023-06-26", "2023-09-22", "2023-11-21", "2023-12-01",
+    "2023-12-04", "2023-12-05", "2023-12-06", "2023-12-07", "2023-12-08",
+    "2023-12-11", "2024-04-19", "2024-05-28", "2024-06-18", "2024-08-08",
+    "2024-11-19"
+  ],
+  "n_union_days": 31,
+  "n_trading_days_in_window_approx": 1670,
+  "instrument_scope": "Databento reports dataset-wide daily condition, not per-instrument. A real per-ticker check was run against every one of the 14 pilot tickers' own PRIMARY-LISTING-VENUE bars on all 31 union dates (data availability + OHLC-invariant + zero-volume + NaN-price checks): zero anomalies and zero missing rows found -- every ticker has a real, well-formed bar on every one of these 31 dates. This does not certify the underlying market microstructure was undisturbed on those dates (Databento's own dataset-wide 'degraded' flag may reflect something not visible in a daily OHLCV bar, e.g. a gap in intraday order-book completeness) -- only that the specific daily bars this pilot acquires show no structural defect. Re-checked once a candidate signal/execution schedule exists (instruction 10) against that schedule's own specific decision/execution dates.",
+  "instrument_scope_check_method": "alpha_agent.etf.data_source.load_primary_listing_bars per ticker; membership test against union_of_all_degraded_dates; low<=min(open,close)<=max(open,close)<=high, volume>0, no NaN open/close.",
+  "disposition": "Not dropped. Per-ticker structural check complete and clean (see instrument_scope above); no evidence found that any of the 31 degraded days corrupts this pilot's own acquired bars. Final classification against the chosen candidate signal's own decision/execution dates is deferred to instruction 10, per instruction 8's own ordering."
+}

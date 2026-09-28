@@ -1,0 +1,1938 @@
+{
+  "manifest": {
+    "compute_estimate": {
+      "dsr_effective_trial_count_by_model_family": {
+        "HIST_GRADIENT_BOOSTING": 8,
+        "LOGISTIC_L2": 3
+      },
+      "n_ablation_trials": 20,
+      "n_configuration_fold_inspections": 1900,
+      "n_cpp_evaluations_headline": 180,
+      "n_cpp_evaluations_placebo_max": 1200,
+      "n_cpp_evaluations_primary_baseline": 60,
+      "n_cpp_evaluations_total_excluding_placebo": 240,
+      "n_cpp_evaluations_total_max": 1440,
+      "n_diagnostic_reruns_planned": 0,
+      "n_distinct_fitted_pipelines": 12,
+      "n_distinct_model_configurations_fitted": 76,
+      "n_headline_trials": 40,
+      "n_hyperparameter_points_by_model_family": {
+        "HIST_GRADIENT_BOOSTING": 8,
+        "LOGISTIC_L2": 3
+      },
+      "n_inner_fits": 1140,
+      "n_inspected_configurations_dsr": 380,
+      "n_ml_hypotheses_bh_denominator": 60,
+      "n_model_fits_total": 1200,
+      "n_oof_producing_fits": 60,
+      "n_threshold_configurations": 1,
+      "notes": [
+        "TAKE_THRESHOLD is FROZEN at 0.50 and is not a search dimension. The Phase 15A inner loop swept {0.45, 0.50, 0.55, 0.60} while scoring every candidate with mean inner-fold log loss -- a probability-based objective that is independent of the decision threshold -- so the sweep selected nothing and only inflated the DSR term fourfold. Thresholds such as 0.55 / 0.60 may return only as an explicitly predeclared decision-policy family, never chosen on PnL.",
+        "A repeated fit of the SAME configuration on another CV fold is a TRAINING operation, not a new independent model hypothesis. Fold counts therefore multiply the fit totals (1,140 inner + 60 outer) and never the DSR search-breadth term (380).",
+        "A fitted pipeline is per (primary_family, model_family, regime_kind): the model is trained POOLED across the five roots with root as a categorical feature, then evaluated per root. Five per-root trials therefore SHARE one fitted pipeline but are five separately inspected economic results, so all five stay in the BH denominator.",
+        "dsr_effective_trial_count_by_model_family gives the TRIAL-level breadth used to deflate one trial's Sharpe (3 for LOGISTIC_L2, 8 for HIST_GRADIENT_BOOSTING). n_inspected_configurations_dsr = 380 is the FAMILY-level breadth, used when the best result of the whole Phase 15 search is what is being judged.",
+        "n_oof_producing_fits counts only the outer refits that actually emit an OOF prediction. Every other fit is inner-loop selection and never scores a row it could have been trained on.",
+        "Placebo runs are conditional on a trial rejecting its gating null. Given the Phase 13.5C prior (0 PASS in 107 trials) the expected placebo count is near zero; the number quoted is the ceiling, not a plan. Placebos are nulls and never enter the BH denominator.",
+        "Diagnostic reruns are 0 by predeclaration. Any that later prove necessary are recorded as SensitivityEvidence, never as new trials -- unless they inspect a genuinely new model configuration, which makes them a new trial that must be predeclared first."
+      ],
+      "placebo_policy": "conditional_on_gating_null_rejection",
+      "superseded_n_inspected_configurations_dsr": 7600,
+      "take_threshold": 0.5
+    },
+    "cost_scenarios": [
+      {
+        "kind": "multiplier",
+        "label": "baseline_1_0x",
+        "multiplier": 1.0
+      },
+      {
+        "kind": "multiplier",
+        "label": "stress_1_5x",
+        "multiplier": 1.5
+      },
+      {
+        "kind": "multiplier",
+        "label": "stress_2_0x",
+        "multiplier": 2.0
+      }
+    ],
+    "feature_set": {
+      "categoricals": [
+        "root_symbol",
+        "primary_side"
+      ],
+      "feature_engine_version": "0.9.2",
+      "features": [
+        {
+          "alias": "mom_20",
+          "rationale": "short-horizon trend the primary is riding",
+          "spec": {
+            "kind": "cum_log_return",
+            "min_observations": null,
+            "params": {
+              "window": 20
+            },
+            "price_field": "close",
+            "required_price_domain": null,
+            "roll_mode": null,
+            "session_policy": null
+          }
+        },
+        {
+          "alias": "mom_120",
+          "rationale": "long-horizon trend context",
+          "spec": {
+            "kind": "cum_log_return",
+            "min_observations": null,
+            "params": {
+              "window": 120
+            },
+            "price_field": "close",
+            "required_price_domain": null,
+            "roll_mode": null,
+            "session_policy": null
+          }
+        },
+        {
+          "alias": "rvol_20",
+          "rationale": "current realised volatility",
+          "spec": {
+            "kind": "realized_vol",
+            "min_observations": null,
+            "params": {
+              "window": 20
+            },
+            "price_field": "close",
+            "required_price_domain": null,
+            "roll_mode": null,
+            "session_policy": null
+          }
+        },
+        {
+          "alias": "rvol_60",
+          "rationale": "slower volatility level; the 20/60 pair expresses vol expansion",
+          "spec": {
+            "kind": "realized_vol",
+            "min_observations": null,
+            "params": {
+              "window": 60
+            },
+            "price_field": "close",
+            "required_price_domain": null,
+            "roll_mode": null,
+            "session_policy": null
+          }
+        },
+        {
+          "alias": "atr_14",
+          "rationale": "range-based volatility, robust to gaps",
+          "spec": {
+            "kind": "atr",
+            "min_observations": null,
+            "params": {
+              "window": 14
+            },
+            "price_field": "close",
+            "required_price_domain": null,
+            "roll_mode": null,
+            "session_policy": null
+          }
+        },
+        {
+          "alias": "zscore_20",
+          "rationale": "stretch from the local mean -- distance from a reversion threshold",
+          "spec": {
+            "kind": "zscore",
+            "min_observations": null,
+            "params": {
+              "window": 20
+            },
+            "price_field": "close",
+            "required_price_domain": null,
+            "roll_mode": null,
+            "session_policy": null
+          }
+        },
+        {
+          "alias": "dist_ma_50",
+          "rationale": "signal strength: how far price sits from the trend anchor",
+          "spec": {
+            "kind": "dist_from_ma",
+            "min_observations": null,
+            "params": {
+              "window": 50
+            },
+            "price_field": "close",
+            "required_price_domain": null,
+            "roll_mode": null,
+            "session_policy": null
+          }
+        },
+        {
+          "alias": "donchian_pos_55",
+          "rationale": "position in the breakout channel -- distance from the breakout level",
+          "spec": {
+            "kind": "donchian_pos",
+            "min_observations": null,
+            "params": {
+              "window": 55
+            },
+            "price_field": "close",
+            "required_price_domain": null,
+            "roll_mode": null,
+            "session_policy": null
+          }
+        },
+        {
+          "alias": "trend_strength_50_200",
+          "rationale": "fast/slow trend agreement",
+          "spec": {
+            "kind": "trend_strength",
+            "min_observations": null,
+            "params": {
+              "fast": 50,
+              "slow": 200
+            },
+            "price_field": "close",
+            "required_price_domain": null,
+            "roll_mode": null,
+            "session_policy": null
+          }
+        },
+        {
+          "alias": "vol_percentile_20_252",
+          "rationale": "causal volatility regime coordinate",
+          "spec": {
+            "kind": "vol_percentile",
+            "min_observations": null,
+            "params": {
+              "lookback": 252,
+              "window": 20
+            },
+            "price_field": "close",
+            "required_price_domain": null,
+            "roll_mode": null,
+            "session_policy": null
+          }
+        },
+        {
+          "alias": "volume_zscore_20",
+          "rationale": "participation relative to its own recent norm",
+          "spec": {
+            "kind": "volume_zscore",
+            "min_observations": null,
+            "params": {
+              "window": 20
+            },
+            "price_field": "close",
+            "required_price_domain": null,
+            "roll_mode": null,
+            "session_policy": null
+          }
+        }
+      ],
+      "label": "phase_15_mvp_causal_v1",
+      "price_domain": "back_adjusted",
+      "schema_version": "ml-feature-set/1"
+    },
+    "hyperparameter_grid": {
+      "HIST_GRADIENT_BOOSTING": [
+        {
+          "learning_rate": 0.05,
+          "max_depth": 2,
+          "max_iter": 100
+        },
+        {
+          "learning_rate": 0.05,
+          "max_depth": 2,
+          "max_iter": 300
+        },
+        {
+          "learning_rate": 0.1,
+          "max_depth": 2,
+          "max_iter": 100
+        },
+        {
+          "learning_rate": 0.1,
+          "max_depth": 2,
+          "max_iter": 300
+        },
+        {
+          "learning_rate": 0.05,
+          "max_depth": 3,
+          "max_iter": 100
+        },
+        {
+          "learning_rate": 0.05,
+          "max_depth": 3,
+          "max_iter": 300
+        },
+        {
+          "learning_rate": 0.1,
+          "max_depth": 3,
+          "max_iter": 100
+        },
+        {
+          "learning_rate": 0.1,
+          "max_depth": 3,
+          "max_iter": 300
+        }
+      ],
+      "LOGISTIC_L2": [
+        {
+          "C": 0.1
+        },
+        {
+          "C": 1.0
+        },
+        {
+          "C": 10.0
+        }
+      ]
+    },
+    "identity_semantics": {
+      "identities_per_predeclared_hypothesis": 1,
+      "identity_is_pre_run": true,
+      "identity_schema": "experiment-identity/2",
+      "model_side_identity_unit": "predeclared_model_search_procedure",
+      "n_pre_run_experiment_identities": 60,
+      "post_fit_provenance_never_identity": [
+        "the hyperparameters an outer fold selected",
+        "the per-fold selected model identity and artifact fingerprint",
+        "inner objective values",
+        "target_schedule_hash",
+        "report_fingerprint"
+      ],
+      "pre_run_identity_includes": [
+        "composite strategy fingerprint (primary specs + meta-label pipeline)",
+        "model family",
+        "the FULL frozen search grid, in declaration order",
+        "selection objective",
+        "selection tie-break",
+        "model search random seed",
+        "regime representation",
+        "frozen TAKE threshold (0.50)",
+        "nested-CV split identity",
+        "the ML feature set's OWN fingerprint",
+        "dataset / ValidationSpec / ReliabilityPolicy / execution / cost / risk planes"
+      ],
+      "rationale": "Under nested CV the hyperparameter point is selected inside each outer training fold, so no point exists before the run and different folds may select different ones. The scientific hypothesis a trial states is about the predeclared SEARCH, so the search is identity and the selection is evidence."
+    },
+    "inner_objective": "mean_inner_fold_log_loss_minimised",
+    "inner_selection_dimensions": [
+      "model_hyperparameter_configuration"
+    ],
+    "meta_label_spec": {
+      "feature_offset_bars": 0,
+      "kind": "PRIMARY_EPISODE_NET_PNL_SIGN",
+      "label_definition_text": "label = 1 iff the SUM of C++ Fill-derived net_pnl_usd over the closed trades attributed to the primary episode is strictly greater than positive_threshold_usd; else 0. Attribution: a trade belongs to the episode that was open when the trade opened. Episodes that are unterminated at the corpus end, or that produced no attributed fill, are EXCLUDED with a typed reason and never labelled 0.",
+      "positive_threshold_usd": 0.0,
+      "require_attributed_fills": true,
+      "require_terminated_episode": true,
+      "schema_version": "meta-label-spec/1"
+    },
+    "model_searches": {
+      "HIST_GRADIENT_BOOSTING": {
+        "identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "n_configurations": 8,
+        "random_seed": 20250101,
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first"
+      },
+      "LOGISTIC_L2": {
+        "identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "n_configurations": 3,
+        "random_seed": 20250101,
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first"
+      }
+    },
+    "multiple_testing_family": {
+      "ablation": 20,
+      "bh_q": 0.1,
+      "cross_root_summaries_in_denominator": false,
+      "diagnostic_reruns_in_denominator": false,
+      "dsr_effective_trial_count": 380,
+      "dsr_effective_trial_count_by_model_family": {
+        "HIST_GRADIENT_BOOSTING": 8,
+        "LOGISTIC_L2": 3
+      },
+      "dsr_effective_trial_count_superseded": 7600,
+      "family_id": "phase_15_ml.all",
+      "headline": 40,
+      "n_trials": 60,
+      "note": "Phase 15 is a SEPARATE multiple-testing family. The 107 Phase 13.5C trials are historical and unchanged and are never folded into this denominator. BH/FDR runs over the trials listed here; each is one out-of-sample economic result actually inspected. DSR uses the inspected-CONFIGURATION count, because DSR is the tool that deflates for how much SEARCH produced a result: each trial's inner loop chooses among a finite predeclared hyperparameter grid, and pretending that search did not happen would overstate every Sharpe. The count is 380, not the superseded 7,600: the TAKE threshold is frozen at 0.50 rather than swept (the inner objective is threshold-independent, so the sweep selected nothing), and refitting one configuration on another CV fold is a training operation rather than a new model hypothesis.",
+      "phase_13_5c_family_id": "phase_13_5c.all",
+      "phase_13_5c_n_trials_unchanged": 107,
+      "phase_13_5c_trials_folded_in": false,
+      "placebo_in_denominator": false,
+      "take_threshold": 0.5,
+      "threshold_is_searched": false
+    },
+    "nested_cv": {
+      "corpus_end_ts_ns": 1735689600000000000,
+      "corpus_start_ts_ns": 1514764800000000000,
+      "embargo_days": 10,
+      "min_test_events": 20,
+      "min_train_days": 365,
+      "min_train_events": 100,
+      "n_inner_folds": 3,
+      "outer_test_blocks": [
+        [
+          1577836800000000000,
+          1609459200000000000
+        ],
+        [
+          1609459200000000000,
+          1640995200000000000
+        ],
+        [
+          1640995200000000000,
+          1672531200000000000
+        ],
+        [
+          1672531200000000000,
+          1704067200000000000
+        ],
+        [
+          1704067200000000000,
+          1735689600000000000
+        ]
+      ],
+      "schema_version": "ml-nested-cv/1"
+    },
+    "not_evaluated": [
+      {
+        "note": "SILVER_BULLET_BENCHMARK is a frozen native-1m NQ hypothesis. Its episodes are intraday, so the label horizon, the purge/embargo scale and the event density are all different from the daily-cadence baselines. Meta-labeling it is a separate predeclared hypothesis family for a later phase, not an MVP variant.",
+        "primary_family": "silver_bullet",
+        "reason": "native_1m_cadence_needs_its_own_label_horizon",
+        "roots": [
+          "NQ"
+        ]
+      }
+    ],
+    "phase": "15",
+    "placebo_draws": 20,
+    "placebo_policy": "conditional_on_gating_null_rejection",
+    "preprocessing": {
+      "kind": "MEDIAN_IMPUTE_STANDARDIZE",
+      "schema_version": "ml-preprocessing-spec/1",
+      "winsorize_sigma": 5.0
+    },
+    "primary_families": [
+      "tsmom",
+      "ma_trend",
+      "breakout",
+      "mean_reversion"
+    ],
+    "regime_ablation": {
+      "algorithm": "independent_axis_tertiles_cartesian_product/1",
+      "axis_bucket_count": 3,
+      "axis_semantics": [],
+      "combination": "cartesian_product_axis0_major",
+      "digitize_right": false,
+      "inputs": [],
+      "kind": "NONE",
+      "n_buckets": 3,
+      "n_clusters": 3,
+      "quantile_interpolation": "linear",
+      "quantile_probs": [
+        0.3333333333333333,
+        0.6666666666666666
+      ],
+      "random_seed": 0,
+      "schema_version": "ml-regime-spec/1"
+    },
+    "regime_baseline": {
+      "algorithm": "independent_axis_tertiles_cartesian_product/1",
+      "axis_bucket_count": 3,
+      "axis_semantics": [
+        "axis 0 -- realized_vol(20) tertiles: lo = calmest third of the train fold, mid, hi = most volatile third",
+        "axis 1 -- signed trend_strength(50,200) tertiles: lo = most negative third (fast MA well below slow -- bearish), mid = neutral, hi = most positive third (bullish)"
+      ],
+      "combination": "cartesian_product_axis0_major",
+      "digitize_right": false,
+      "inputs": [
+        {
+          "kind": "realized_vol",
+          "min_observations": null,
+          "params": {
+            "window": 20
+          },
+          "price_field": "close",
+          "required_price_domain": null,
+          "roll_mode": null,
+          "session_policy": null
+        },
+        {
+          "kind": "trend_strength",
+          "min_observations": null,
+          "params": {
+            "fast": 50,
+            "slow": 200
+          },
+          "price_field": "close",
+          "required_price_domain": null,
+          "roll_mode": null,
+          "session_policy": null
+        }
+      ],
+      "kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+      "n_buckets": 3,
+      "n_clusters": 3,
+      "quantile_interpolation": "linear",
+      "quantile_probs": [
+        0.3333333333333333,
+        0.6666666666666666
+      ],
+      "random_seed": 0,
+      "schema_version": "ml-regime-spec/1"
+    },
+    "research_model_families": [
+      "LOGISTIC_L2",
+      "HIST_GRADIENT_BOOSTING"
+    ],
+    "roots": [
+      "ES",
+      "NQ",
+      "CL",
+      "GC",
+      "ZN"
+    ],
+    "schema_version": "phase-15-ml-candidate-manifest/4",
+    "supersedes": {
+      "commits": [
+        "497a47b",
+        "75af1f9"
+      ],
+      "manifest_fingerprint": "p15manifest1:7a4ef8a9633bd3f18b982421baf9903b60b857f05fc618de5cd130b9718227ec",
+      "path": "data/manifests/phase_15/ml_candidate_manifest_identity_corrected.json",
+      "preserved": "unchanged in git history and on disk; never amended, never deleted",
+      "reason": "REGIME TRANSFORMATION SEMANTICS. The frozen REGIME_BASELINE declared two inputs -- realized_vol(20) (~[0.02, 0.08], always positive) and trend_strength(50,200) (~[-40, +36], signed) -- but never fixed how they combine into 3 tertile buckets. The Phase 15B.1 implementation used a raw row-wise mean, which on real feature scales is ~1.000 correlated with trend_strength and ~-0.1 with realized_vol: the regime became a tertile bucketing of the trend input ALONE, so the 20 regime-ablation trials would have tested a different question than declared, and the combination rule was not bound to RegimeSpec.identity(). Phase 15B.1b freezes the transformation: per-axis train-fold tertiles of EACH input independently (no standardise-and-average, no PCA / clustering / performance tuning), Cartesian product -> 9 one-hot states, all of it bound into RegimeSpec.identity(). One predeclared transformation, not 9 hypotheses: BH stays 60, DSR stays 3/8 and family breadth 380. Only the 40 regime-baseline pre-run experiment identities regenerate; the 20 NO_REGIME ablation identities are byte-identical. Decided by a human, NOT from real performance, BEFORE any real ML fit."
+    },
+    "supersession_chain": [
+      {
+        "commits": [
+          "72d714b",
+          "7234b7a"
+        ],
+        "manifest_fingerprint": "p15manifest1:3c28e6431deb7c5b66848ec1c6f15ad791d56c153488cf3c57b50de5ac5d537d",
+        "path": "data/manifests/phase_15/ml_candidate_manifest.json",
+        "phase": "15A",
+        "reason": "THRESHOLD-SELECTION SEMANTICS. The Phase 15A manifest declared a four-point TAKE-threshold grid {0.45, 0.50, 0.55, 0.60} selected inside the inner CV loop, while the predeclared inner objective was mean inner-fold log loss. Log loss is a function of the predicted PROBABILITY and is completely independent of the decision threshold, so all four thresholds scored identically on every fold and the 'selection' resolved through a deterministic tie-break rather than through cross-validation. The threshold was therefore not selected by CV at all, while still multiplying the DSR search-breadth term by four. Phase 15A.1 freezes TAKE_THRESHOLD = 0.50, removes the sweep from inner model selection, and rebuilds the pre-run search accounting from the corrected manifest. Corrected BEFORE any real ML performance was observed.",
+        "schema_version": "phase-15-ml-candidate-manifest/1",
+        "superseded_by": "15A.1"
+      },
+      {
+        "commits": [
+          "0bb6014",
+          "c375399"
+        ],
+        "manifest_fingerprint": "p15manifest1:82983cf4f04e101520bb882ddca9aed9dd779565a646e3f4a70c68b352897975",
+        "path": "data/manifests/phase_15/ml_candidate_manifest_corrected.json",
+        "phase": "15A.1",
+        "reason": "PRE-RUN EXPERIMENT-IDENTITY SEMANTICS. Phase 15A/15A.1 built the ML experiment identity around one concrete MLModelSpec -- a single hyperparameter point. Under the frozen nested-CV protocol a hyperparameter point is selected INSIDE each outer training fold, so it does not exist before the run and different outer folds may legitimately select different points. Keying identity on a point therefore (a) made identity un-computable pre-run, defeating duplicate detection, (b) named a configuration the protocol never uniquely produces, and (c) split each of the 60 predeclared economic hypotheses into H registry-facing identities (380 rows for 60 hypotheses), silently disagreeing with the BH/FDR denominator. Phase 15A.2 makes the whole predeclared model-search PROCEDURE -- family, full frozen grid in declaration order, selection objective, tie-break and seed -- the identity input, and demotes the selected hyperparameters to post-fit provenance. Corrected BEFORE any real ML performance was observed. No count changes: 60 trials, 380 DSR configurations, 1,200 model fits, 240 C++ evaluations, threshold 0.50, gates 100/20.",
+        "schema_version": "phase-15-ml-candidate-manifest/2",
+        "superseded_by": "15A.2"
+      },
+      {
+        "commits": [
+          "497a47b",
+          "75af1f9"
+        ],
+        "manifest_fingerprint": "p15manifest1:7a4ef8a9633bd3f18b982421baf9903b60b857f05fc618de5cd130b9718227ec",
+        "path": "data/manifests/phase_15/ml_candidate_manifest_identity_corrected.json",
+        "phase": "15A.2",
+        "reason": "REGIME TRANSFORMATION SEMANTICS. The frozen REGIME_BASELINE declared two inputs -- realized_vol(20) (~[0.02, 0.08], always positive) and trend_strength(50,200) (~[-40, +36], signed) -- but never fixed how they combine into 3 tertile buckets. The Phase 15B.1 implementation used a raw row-wise mean, which on real feature scales is ~1.000 correlated with trend_strength and ~-0.1 with realized_vol: the regime became a tertile bucketing of the trend input ALONE, so the 20 regime-ablation trials would have tested a different question than declared, and the combination rule was not bound to RegimeSpec.identity(). Phase 15B.1b freezes the transformation: per-axis train-fold tertiles of EACH input independently (no standardise-and-average, no PCA / clustering / performance tuning), Cartesian product -> 9 one-hot states, all of it bound into RegimeSpec.identity(). One predeclared transformation, not 9 hypotheses: BH stays 60, DSR stays 3/8 and family breadth 380. Only the 40 regime-baseline pre-run experiment identities regenerate; the 20 NO_REGIME ablation identities are byte-identical. Decided by a human, NOT from real performance, BEFORE any real ML fit.",
+        "schema_version": "phase-15-ml-candidate-manifest/3",
+        "superseded_by": "15B.1b"
+      }
+    ],
+    "take_threshold": 0.5,
+    "threshold_is_searched": false,
+    "trials": [
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "tsmom",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "ES",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ES__ML_TSMOM__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "tsmom",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "NQ",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "NQ__ML_TSMOM__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "tsmom",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "CL",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "CL__ML_TSMOM__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "tsmom",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "GC",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "GC__ML_TSMOM__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "tsmom",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "ZN",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ZN__ML_TSMOM__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "tsmom",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "ES",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ES__ML_TSMOM__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "tsmom",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "NQ",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "NQ__ML_TSMOM__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "tsmom",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "CL",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "CL__ML_TSMOM__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "tsmom",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "GC",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "GC__ML_TSMOM__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "tsmom",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "ZN",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ZN__ML_TSMOM__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "ma_trend",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "ES",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ES__ML_MA_TREND__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "ma_trend",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "NQ",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "NQ__ML_MA_TREND__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "ma_trend",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "CL",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "CL__ML_MA_TREND__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "ma_trend",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "GC",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "GC__ML_MA_TREND__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "ma_trend",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "ZN",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ZN__ML_MA_TREND__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "ma_trend",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "ES",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ES__ML_MA_TREND__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "ma_trend",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "NQ",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "NQ__ML_MA_TREND__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "ma_trend",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "CL",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "CL__ML_MA_TREND__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "ma_trend",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "GC",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "GC__ML_MA_TREND__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "ma_trend",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "ZN",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ZN__ML_MA_TREND__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "breakout",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "ES",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ES__ML_BREAKOUT__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "breakout",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "NQ",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "NQ__ML_BREAKOUT__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "breakout",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "CL",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "CL__ML_BREAKOUT__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "breakout",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "GC",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "GC__ML_BREAKOUT__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "breakout",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "ZN",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ZN__ML_BREAKOUT__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "breakout",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "ES",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ES__ML_BREAKOUT__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "breakout",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "NQ",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "NQ__ML_BREAKOUT__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "breakout",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "CL",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "CL__ML_BREAKOUT__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "breakout",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "GC",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "GC__ML_BREAKOUT__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "breakout",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "ZN",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ZN__ML_BREAKOUT__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "mean_reversion",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "ES",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ES__ML_MEAN_REVERSION__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "mean_reversion",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "NQ",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "NQ__ML_MEAN_REVERSION__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "mean_reversion",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "CL",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "CL__ML_MEAN_REVERSION__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "mean_reversion",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "GC",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "GC__ML_MEAN_REVERSION__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "LOGISTIC_L2",
+        "model_search_identity": "mlmodelsearch1:4770ee7ae9a4ace912b38fe61c9cbd081d945d3e48282e4c2514f329d115665a",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 3,
+        "n_threshold_configurations": 1,
+        "primary_family": "mean_reversion",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "ZN",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ZN__ML_MEAN_REVERSION__LOGISTIC_L2",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "mean_reversion",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "ES",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ES__ML_MEAN_REVERSION__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "mean_reversion",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "NQ",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "NQ__ML_MEAN_REVERSION__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "mean_reversion",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "CL",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "CL__ML_MEAN_REVERSION__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "mean_reversion",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "GC",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "GC__ML_MEAN_REVERSION__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "mean_reversion",
+        "regime_kind": "DETERMINISTIC_CAUSAL_VOL_TREND",
+        "root_symbol": "ZN",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ZN__ML_MEAN_REVERSION__HIST_GRADIENT_BOOSTING",
+        "trial_role": "HEADLINE"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "tsmom",
+        "regime_kind": "NONE",
+        "root_symbol": "ES",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ES__ML_TSMOM__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "tsmom",
+        "regime_kind": "NONE",
+        "root_symbol": "NQ",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "NQ__ML_TSMOM__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "tsmom",
+        "regime_kind": "NONE",
+        "root_symbol": "CL",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "CL__ML_TSMOM__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "tsmom",
+        "regime_kind": "NONE",
+        "root_symbol": "GC",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "GC__ML_TSMOM__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "tsmom",
+        "regime_kind": "NONE",
+        "root_symbol": "ZN",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ZN__ML_TSMOM__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "ma_trend",
+        "regime_kind": "NONE",
+        "root_symbol": "ES",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ES__ML_MA_TREND__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "ma_trend",
+        "regime_kind": "NONE",
+        "root_symbol": "NQ",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "NQ__ML_MA_TREND__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "ma_trend",
+        "regime_kind": "NONE",
+        "root_symbol": "CL",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "CL__ML_MA_TREND__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "ma_trend",
+        "regime_kind": "NONE",
+        "root_symbol": "GC",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "GC__ML_MA_TREND__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "ma_trend",
+        "regime_kind": "NONE",
+        "root_symbol": "ZN",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ZN__ML_MA_TREND__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "breakout",
+        "regime_kind": "NONE",
+        "root_symbol": "ES",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ES__ML_BREAKOUT__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "breakout",
+        "regime_kind": "NONE",
+        "root_symbol": "NQ",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "NQ__ML_BREAKOUT__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "breakout",
+        "regime_kind": "NONE",
+        "root_symbol": "CL",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "CL__ML_BREAKOUT__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "breakout",
+        "regime_kind": "NONE",
+        "root_symbol": "GC",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "GC__ML_BREAKOUT__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "breakout",
+        "regime_kind": "NONE",
+        "root_symbol": "ZN",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ZN__ML_BREAKOUT__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "mean_reversion",
+        "regime_kind": "NONE",
+        "root_symbol": "ES",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ES__ML_MEAN_REVERSION__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "mean_reversion",
+        "regime_kind": "NONE",
+        "root_symbol": "NQ",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "NQ__ML_MEAN_REVERSION__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "mean_reversion",
+        "regime_kind": "NONE",
+        "root_symbol": "CL",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "CL__ML_MEAN_REVERSION__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "mean_reversion",
+        "regime_kind": "NONE",
+        "root_symbol": "GC",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "GC__ML_MEAN_REVERSION__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      },
+      {
+        "model_family": "HIST_GRADIENT_BOOSTING",
+        "model_search_identity": "mlmodelsearch1:0c3905266d8077a53fe4cb99405aaf01ba271e44c850ab4c34839ff5e15f7e81",
+        "model_search_random_seed": 20250101,
+        "multiple_testing_family_id": "phase_15_ml.all",
+        "n_hyperparameter_points": 8,
+        "n_threshold_configurations": 1,
+        "primary_family": "mean_reversion",
+        "regime_kind": "NONE",
+        "root_symbol": "ZN",
+        "selection_objective": "mean_inner_fold_log_loss_minimised",
+        "selection_tie_break": "frozen_grid_declaration_order_first",
+        "take_threshold": 0.5,
+        "training_roots": [
+          "ES",
+          "NQ",
+          "CL",
+          "GC",
+          "ZN"
+        ],
+        "trial_label": "ZN__ML_MEAN_REVERSION__HIST_GRADIENT_BOOSTING__NO_REGIME",
+        "trial_role": "ABLATION"
+      }
+    ]
+  },
+  "manifest_fingerprint": "p15manifest1:e065ae999c966961d63de74f3fa02629217d5d26115d18e24d353552f251c82d",
+  "n_trials": 60
+}

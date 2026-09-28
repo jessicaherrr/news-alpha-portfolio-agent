@@ -1,0 +1,29 @@
+{
+  "calendar_identity": "2026-09-phase04",
+  "canonicalization_version": "1.0",
+  "code_commit": "06ac9db",
+  "component_kind": "continuous_front_ohlcv1m",
+  "contract_definition_identity": "defs:eb2466532d11ddde",
+  "databento_schema": "ohlcv-1m",
+  "dataset": "GLBX.MDP3",
+  "download_cost_usd": 2.443517521024,
+  "downloaded_at": "2026-09-08T06:49:09.943884+00:00",
+  "end": "2025-01-01",
+  "ingestion_version": "databento-source/1",
+  "price_domain": "raw_contract",
+  "query_identity": "dbnq1:ef5669d9b40b35b83f7616f3",
+  "raw_artifact_relpath": "data/raw/databento/GLBX.MDP3/ohlcv-1m/edf527066a10e479/ohlcv-1m.dbn.zst",
+  "raw_or_continuous_role": "continuous_front",
+  "raw_sha256": "d835504d7b84374ceae7b7da51ad81633502c674e97454e2d4b9bfaab4e8a652",
+  "root_symbol": "ZN",
+  "row_count": 669313,
+  "schema_version": "real-dataset/1",
+  "split_role": "validation",
+  "start": "2023-01-01",
+  "stype_in": "continuous",
+  "stype_out": "instrument_id",
+  "symbol_request": [
+    "ZN.v.0"
+  ],
+  "vendor": "databento"
+}

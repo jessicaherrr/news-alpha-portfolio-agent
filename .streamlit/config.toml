@@ -1,0 +1,42 @@
+# Phase 20.1 -- dark institutional-terminal theme for the Streamlit research
+# interface (python/alpha_agent/ui/app.py). Values mirror the color tokens in
+# python/alpha_agent/ui/palette.py -- keep the two in sync by hand if either
+# changes. Native theming (this file) covers what CSS cannot reach (the
+# canvas-rendered st.dataframe grid, default chart colors, widget borders);
+# python/alpha_agent/ui/layout.py injects a small supplementary CSS block for
+# the sidebar nav / card / badge look this file's keys don't cover.
+
+[theme]
+base = "dark"
+primaryColor = "#3b82f6"
+backgroundColor = "#0a0d16"
+secondaryBackgroundColor = "#121729"
+textColor = "#eef1f8"
+borderColor = "#232a42"
+dataframeBorderColor = "#232a42"
+dataframeHeaderBackgroundColor = "#161c33"
+showWidgetBorder = true
+showSidebarBorder = true
+baseRadius = "medium"
+buttonRadius = "medium"
+font = "sans-serif"
+
+blueColor = "#3b82f6"
+greenColor = "#22c55e"
+redColor = "#ef4444"
+orangeColor = "#f59e0b"
+yellowColor = "#f59e0b"
+violetColor = "#a78bfa"
+grayColor = "#6b7280"
+
+chartCategoricalColors = [
+  "#3b82f6", "#22d3ee", "#a78bfa", "#f59e0b",
+  "#f472b6", "#34d399", "#fb923c", "#f87171",
+]
+
+[client]
+toolbarMode = "minimal"
+showSidebarNavigation = true
+
+[browser]
+gatherUsageStats = false

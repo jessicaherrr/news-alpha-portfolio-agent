@@ -1,0 +1,24 @@
+{
+  "latest_allowed_performance_date": "2024-12-31",
+  "phase": "13.5C",
+  "recorded_at_note": "2026-09-08T20:50:48.710292+00:00",
+  "windows": {
+    "2018-01-01..2022-12-31": {
+      "engineering_access": true,
+      "performance_access": true,
+      "role": "RESEARCH"
+    },
+    "2023-01-01..2024-12-31": {
+      "engineering_access": true,
+      "performance_access": "released only for this Phase 13.5C evaluation",
+      "prior_inspection": "validation raw market data was previously inspected for DATA-ENGINEERING QA ONLY (Phase 13.5B acquisition QA gate), NOT for strategy-performance selection",
+      "role": "VALIDATION"
+    },
+    "2025-01-01..2025-12-31": {
+      "downloaded": false,
+      "engineering_access": false,
+      "performance_access": false,
+      "role": "LOCKED_HOLDOUT"
+    }
+  }
+}

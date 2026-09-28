@@ -1,0 +1,52 @@
+{
+  "schema": "release-registry-summary/1",
+  "purpose": "Frozen, derived, packaging-only snapshot of the live ExperimentRegistry's headline numbers, so a clean git clone (no operational data/registry/experiments.sqlite, which is gitignored and never committed) can still mechanically verify the exact figures README.md quotes -- without a network call, without Databento spend, without touching 2025+ data, and without re-running any research. This is NOT a new scientific result and NOT the registry itself: every value below the Phase 13.5C/15B scientific content is a read-only re-derivation of the live registry's actual current state, refreshed whenever a legitimate, evidence-backed registry-writing append occurs (the registry is append-only and expected to grow over time -- see CLAUDE.md's experiment-registry workflow step 6 and docs/EXPERIMENT_REGISTRY.md). Nothing was recomputed, re-validated, or re-adjudicated to produce it.",
+  "generated_at": "2026-09-23T00:00:00Z",
+  "scientific_state_frozen_through": "ce191c4",
+  "scientific_state_note": "The Phase 13.5C (107 identities) and Phase 15B (60 identities) scientific/registry-content state this snapshot describes has been frozen since ce191c4 (Phase 23.2: enforce universal Databento holdout boundary) and remains BIT-IDENTICAL and untouched by anything below -- see tests/python/test_phase_15_adjudication.py::test_phase_13_5c_registry_evidence_is_unchanged and tests/python/test_phase_15_ml.py::test_phase_13_registry_entries_are_untouched_by_phase_15, both scoped to `experiment.phase == \"13.5C\"` / `\"15B\"` specifically, never to the registry's total. The counts below that changed since the prior snapshot (authoritative_experiment_identities 169->170, canonical 63->64, canonical REJECT 21->22, failure_records 228->229, total_experiment_rows 190->191, execution_attempts.total/valid 250/190->251/191, registry_schema_version 5->6) are entirely explained by THREE later, real, sanctioned registry-writing appends -- never a Phase 13.5C/15B rewrite, never a scientific-semantics change: (1) CL__TSMOM__CANONICAL__VALIDATION_2023_2024__D90A9ABA67 (phase=\"agent-runtime\", CL re-rooted onto the tsmom canonical params, an earlier real \"Run This Hypothesis\" click from this checkout's own prior Golden Path manual acceptance testing); (2) NQ__TSMOM__CANONICAL__VALIDATION_2023_2024__C184F598C7 (phase=\"research-golden-path-v1-acceptance\", the Research Golden Path V1 acceptance pass's new, genuinely novel tsmom/NQ (fast_horizon=30, slow_horizon=150) experiment, verdict REJECT); (3) XLE__ETF_TSMOM__CANONICAL__VALIDATION__285C2E4D47 (phase=\"6\", the Phase 6 ETF Research Pilot's first real, complete News->Mechanism->Factor->Hypothesis->Strategy->ETF execution->Validation loop -- real Databento equities data, real C++ execution and validation, `asset_domain=\"ETF\"`, `root_symbol=\"XLE\"`, `strategy_family=\"etf_tsmom\"`, verdict REJECT: null hypothesis not rejected, BH q=0.745, DSR probability 0.139, negative OOS net PnL). The schema_version bump (5->6) is the additive Phase 6 `experiments.asset_domain` column (preservation-only migration, `experiment_identity` values byte-identical across it -- see tests/python/test_phase6_registry_asset_domain.py). All three are CANONICAL trial role WITHIN THEIR OWN single-member research family (each has its own `multiple_testing_family_id`/`candidate_manifest_fingerprint`, distinct from `phase_13_5c.*` and from each other) -- never retroactively merged into the frozen Phase 13.5C multiple-testing family or into each other's family, and none is holdout_eligible (2025 was never accessed by any of them). The ETF row is additionally structurally separated from every Futures row by `asset_domain` -- it never enters a Futures BH/FDR family, never contaminates Futures evidence, and is evaluated as its own single-experiment family.",
+  "base_head_before_release_snapshot": "7b97929c7514108ad2765357c1b9b7e27e6c1907",
+  "snapshot_generation_context": "Regenerated read-only from the live local registry after three later, real, sanctioned registry-writing appends (see scientific_state_note) -- the Phase 13.5C/15B scientific content itself is unchanged; only the live total grew, exactly as CLAUDE.md's append-only registry design anticipates.",
+  "generation_method": "Read-only, offline, from the local data/registry/experiments.sqlite: `python scripts/phase_14_registry.py --json summary` for every registry-derived figure, and `python scripts/phase_21_paper_trading.py list-eligible` for the paper-eligible count. No value below was computed, guessed, or reconstructed by hand.",
+  "registry_schema_version": 6,
+  "registry_identity_schema": "experiment-identity/2",
+  "registry_content_digest": "registrydigest1:682933b2f89ae5171c884212af20247350a719ad08706e70ea68ed13cf052ab4",
+  "authoritative_experiment_identities": 170,
+  "trial_role_breakdown": {
+    "CANONICAL": 64,
+    "NEIGHBOUR": 86,
+    "ABLATION": 20,
+    "VARIANT": 0
+  },
+  "canonical_headline_verdict_breakdown": {
+    "PASS": 0,
+    "REJECT": 22,
+    "INCONCLUSIVE": 2,
+    "NOT_ADJUDICATED": 40,
+    "note": "Only CANONICAL trials (64 total) are individually headline-adjudicated. NEIGHBOUR and ABLATION trials count toward the same BH/FDR family denominator but are not themselves independently PASS/REJECT/INCONCLUSIVE-adjudicated -- both roles resolve to NOT_ADJUDICATED by design (see docs/EXPERIMENT_REGISTRY.md and CLAUDE.md's identity/BH-FDR sections). Of the 64 CANONICAL trials, 61 are the frozen Phase 13.5C canonical trials; the remaining 3 are the standalone single-member-family appends named in scientific_state_note (all three REJECT)."
+  },
+  "paper_trading_eligible_count": 0,
+  "paper_trading_eligibility_note": "Requires an authoritative PASS + all required validation gates satisfied + a rebuildable, fingerprint-verified StrategySpec (alpha_agent.paper.eligibility.assert_paper_trading_eligible). 0 of the 170 authoritative experiment identities are eligible today, because 0 hold an authoritative PASS.",
+  "failure_records": 229,
+  "superseded_experiment_rows": 21,
+  "total_experiment_rows": 191,
+  "execution_attempts": {
+    "total": 251,
+    "valid": 191,
+    "invalid_execution": 60
+  },
+  "holdout_eligible": 0,
+  "holdout_eligible_note": "attempt_results.holdout_eligible -- a validation-methodology flag on VALID attempts, distinct from paper-trading eligibility above. Unrelated to the locked 2025+ market-data holdout; see docs/FINAL_SYSTEM_AUDIT.md for that.",
+  "completed_cpp_executions": 528,
+  "completed_cpp_executions_note": "Summed only from bulk-import metadata (`completed_cpp_execution_count`) recorded by the Phase 14/15B import scripts -- an orchestrator-created single-family import (both later appends above) does not populate this metadata key, so this count is unaffected by either append even though both really did execute the real C++ CLI once each (see each experiment's own committed source_artifact for that evidence).",
+  "sensitivity_reruns": 21,
+  "cross_market_summaries": 5,
+  "reconciliation_checks": {
+    "trial_role_breakdown_sums_to_total": "64 + 86 + 20 + 0 == 170",
+    "canonical_verdict_breakdown_sums_to_canonical": "0 + 22 + 2 + 40 == 64",
+    "mechanically_enforced_by": "python/alpha_agent/registry/sqlite_registry.py RegistrySummary + registry/cli.py cmd_summary (assert on every invocation) and tests/python/test_registry_schema_v5.py::test_summary_role_and_verdict_breakdown_reconciles_for_all_four_trial_roles"
+  },
+  "verification": {
+    "always_run_clean_clone_check": "tests/python/test_readme_registry_claims.py::test_readme_headline_registry_numbers_match_the_frozen_release_snapshot -- compares README.md's quoted numbers against THIS file; never skips, no operational sqlite required",
+    "optional_local_stronger_check": "tests/python/test_readme_registry_claims.py::test_frozen_release_snapshot_matches_the_live_registry -- compares THIS file against a live ExperimentRegistry query; skips cleanly if data/registry/experiments.sqlite is absent (e.g. a clean public clone)"
+  }
+}

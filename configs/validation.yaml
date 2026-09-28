@@ -1,0 +1,84 @@
+# Phase 13 -- default ReliabilityPolicy (frozen typed gates).
+#
+# This YAML is a human-readable mirror of the DEFAULT values in
+# alpha_agent.validation.policy.ReliabilityPolicy / MinimumSampleRequirements.
+# The policy MUST be fixed before any validation / holdout outcome is seen; its
+# fingerprint (policy.identity()) enters every ValidationSpec fingerprint. Editing
+# these values changes validation identity by design.
+#
+# The verdict is one of PASS / REJECT / INCONCLUSIVE with typed reason codes.
+# REJECT is a normal, successful system outcome. No LLM may override it.
+
+reliability_policy:
+  schema_version: "reliability-policy/1"
+
+  minimum_sample:                      # section 8 -- tiny samples -> INCONCLUSIVE
+    min_oos_trading_days: 60
+    min_fills: 20
+    min_trades: 10
+    min_walk_forward_folds: 3
+    min_nonzero_return_days: 20
+
+  null_p_value_max: 0.05               # section 11 -- schedule time-shift / block-bootstrap null
+  fdr_q_threshold: 0.10               # section 12 -- Benjamini-Hochberg q-value
+  fdr_require_canonical_rejected: true
+
+  dsr_min: 0.95                        # section 13 -- Deflated Sharpe probability
+
+  max_cost_degradation: 0.5           # section 15 -- net PnL may lose <= 50% at max stress
+
+  param_stability_min_fraction_positive_sharpe: 0.6   # section 14
+  param_stability_reject_isolated_spike: true
+
+  fold_consistency_min: 0.5           # section 6 -- fraction of positive OOS folds
+  require_positive_oos_net_pnl: true
+
+  require_regime_stability: false     # section 17 -- optional; NOT_EVALUATED -> INCONCLUSIVE when required
+  regime_max_pnl_share: 0.9
+
+  require_cross_market: false         # section 18 -- optional
+  cross_market_max_root_share: 0.9
+
+  require_ablation_mechanism_value: false   # section 16
+
+# Deterministic time-series bootstrap (section 10) + null config (section 11).
+bootstrap:
+  method: stationary                  # or moving_block; never naive IID
+  n_resamples: 2000
+  mean_block_length: 20
+  ci_level: 0.95
+  seed: 0
+
+null_test:
+  # centered_block_bootstrap = the ONLY gating null (NullRole.GATING).
+  # schedule_time_shift = DIAGNOSTIC-ONLY (NullRole.DIAGNOSTIC): a causal
+  # forward-only shift by a FIXED K within a trading_day / session / gap / roll
+  # segment, from a common-support control schedule (rows too near a segment end
+  # to survive any k<=K are pre-dropped from BOTH control and every replicate).
+  # No wrap. The ReliabilityPolicy never gates on it (Phase 13.2).
+  # circular_schedule_permutation = research-only permutation null (opt-in).
+  methods: [schedule_time_shift, centered_block_bootstrap]
+  n_null_samples: 199
+  min_shift_bars: 2
+  max_shift_bars: 10               # FIXED family K (not data-derived)
+  execution_latency_bars: 0        # MUST match EngineConfig::latency_bars
+  gap_multiple: 1.5
+  block_length: 20
+  statistic: daily_sharpe
+  seed: 0
+
+# Cost-stress scenarios (section 15) -- each RERUN through the C++ engine path.
+cost_stress:
+  base_commission_per_contract_usd: 2.0
+  base_slippage_ticks: 0.0
+  base_spread_ticks: 0.0
+  scenarios:
+    - {label: baseline_1_0x, kind: multiplier, multiplier: 1.0}
+    - {label: stress_1_5x,   kind: multiplier, multiplier: 1.5}
+    - {label: stress_2_0x,   kind: multiplier, multiplier: 2.0}
+
+# Chronological split (sections 5, 20). The locked holdout is evaluated exactly
+# once, after the strategy + validation spec + policy are frozen.
+split:
+  embargo_days: 5
+  locked_holdout_years: 2

@@ -1,0 +1,44 @@
+# Phase 13.5A -- real CME futures acquisition plan (DESIGN ONLY, no download).
+#
+# Dataset GLBX.MDP3, schema ohlcv-1m, five roots. These date windows are FROZEN:
+# do not change them after any strategy performance is seen (13.5A section 4).
+# The 2025 LOCKED_HOLDOUT window is never acquired until StrategySpec /
+# ValidationSpec / ReliabilityPolicy / code commit are frozen (13.5A section 14).
+
+dataset: GLBX.MDP3
+research_schema: ohlcv-1m
+calendar_version: "2026-09-phase04"       # configs/calendars/cme.yaml
+roll_overlap_trading_days: 5
+
+roots: [ES, NQ, CL, GC, ZN]
+
+# Exchange-standard front-contract roll cadence (for the roll-overlap estimate;
+# the actual transitions come from the observed continuous instrument_id stream).
+rolls_per_year:
+  ES: 4      # quarterly  Mar Jun Sep Dec
+  NQ: 4      # quarterly
+  ZN: 4      # quarterly
+  GC: 6      # even months, liquidity-driven
+  CL: 12     # monthly
+
+plans:
+  A:
+    windows:
+      - {role: research,       start: "2021-01-01", end: "2024-01-01"}
+      - {role: validation,     start: "2024-01-01", end: "2025-01-01"}
+      - {role: locked_holdout, start: "2025-01-01", end: "2026-01-01"}
+  B:
+    windows:
+      - {role: research,       start: "2018-01-01", end: "2023-01-01"}
+      - {role: validation,     start: "2023-01-01", end: "2025-01-01"}
+      - {role: locked_holdout, start: "2025-01-01", end: "2026-01-01"}
+
+# NQ engineering pilot (13.5A section 15) -- a NON-HOLDOUT interval inside Plan
+# B's validation window. Purpose: prove the full ingest -> features -> DSL ->
+# C++ execution -> canonical trading-day trace chain on real bytes. Not for
+# parameter selection.
+nq_pilot:
+  root: NQ
+  start: "2024-01-01"
+  end: "2024-04-01"
+  schema: ohlcv-1m

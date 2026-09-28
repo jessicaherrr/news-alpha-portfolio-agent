@@ -1,0 +1,17 @@
+# Read-only Databento market-OBSERVATION provider (mission Part D). No
+# credentials belong in this file -- DATABENTO_API_KEY stays in the local
+# .env / environment. Setting `enabled: false` here fully disables every
+# network call this provider could make, same as a missing key.
+
+enabled: true
+ttl_seconds: 30.0
+latest_available_lag_seconds: 86400
+max_auto_fetch_cost_usd: 0.05
+max_lookback_bars: 500
+max_lookback_days: 30
+
+# UI-session-level render cache window (alpha_agent.ui.market_home) -- see
+# DatabentoMarketDataConfig.ui_refresh_interval_seconds's docstring. Bounds
+# how often a Streamlit rerun re-queries the provider at all; independent of
+# (and normally >=) ttl_seconds above.
+ui_refresh_interval_seconds: 90.0

@@ -1,0 +1,1319 @@
+{
+  "manifest": {
+    "bh_fdr_trial_family": {
+      "ablation": 0,
+      "canonical": 21,
+      "cross_market_summarised_not_trials": 20,
+      "data_quality_sensitivity_in_denominator": false,
+      "family_composition_fingerprint": "p135cbhfamily1:3569d6bb287fca0bf94299f13a8222c0c39a94d8e9dd711ad5b5995e9b5204f1",
+      "family_id": "phase_13_5c.all",
+      "neighbour": 86,
+      "note": "unique statistical trials = canonical + predeclared neighbours, de-duplicated by (strategy_fingerprint, root). Cross-market roots are the same per-root canonical results summarised, not new hypotheses. BH/FDR, q-values, DSR effective-trial count and the MultipleTestingFamily fingerprint all use this count.",
+      "unique_trial_count": 107
+    },
+    "cost_scenarios": [
+      {
+        "kind": "multiplier",
+        "label": "baseline_1_0x",
+        "multiplier": 1.0
+      },
+      {
+        "kind": "multiplier",
+        "label": "stress_1_5x",
+        "multiplier": 1.5
+      },
+      {
+        "kind": "multiplier",
+        "label": "stress_2_0x",
+        "multiplier": 2.0
+      }
+    ],
+    "execution_assumptions": {
+      "bars": "native 1-minute RAW_CONTRACT (layer 2); C++ ActiveContractResolver",
+      "commission_per_contract_usd": 2.0,
+      "fill_timing": "decision at bar T -> fill at the next eligible 1m event (T+1+latency)",
+      "latency_bars": 0,
+      "official_pnl_source": "cpp_portfolio_accountant_daily_equity_trace",
+      "slippage_ticks": 0.0,
+      "spread_ticks": 0.0
+    },
+    "global_multiple_testing_family_id": "phase_13_5c.all",
+    "not_evaluated": [
+      {
+        "family_key": "silver_bullet",
+        "note": "SILVER_BULLET_BENCHMARK is a frozen NQ hypothesis (NQ session / window semantics). A root-specific Silver Bullet window is a NEW hypothesis with its own StrategySpec fingerprint, for a later phase.",
+        "reason": "benchmark_not_predeclared_for_root",
+        "root_symbol": "ES"
+      },
+      {
+        "family_key": "silver_bullet",
+        "note": "SILVER_BULLET_BENCHMARK is a frozen NQ hypothesis (NQ session / window semantics). A root-specific Silver Bullet window is a NEW hypothesis with its own StrategySpec fingerprint, for a later phase.",
+        "reason": "benchmark_not_predeclared_for_root",
+        "root_symbol": "CL"
+      },
+      {
+        "family_key": "silver_bullet",
+        "note": "SILVER_BULLET_BENCHMARK is a frozen NQ hypothesis (NQ session / window semantics). A root-specific Silver Bullet window is a NEW hypothesis with its own StrategySpec fingerprint, for a later phase.",
+        "reason": "benchmark_not_predeclared_for_root",
+        "root_symbol": "GC"
+      },
+      {
+        "family_key": "silver_bullet",
+        "note": "SILVER_BULLET_BENCHMARK is a frozen NQ hypothesis (NQ session / window semantics). A root-specific Silver Bullet window is a NEW hypothesis with its own StrategySpec fingerprint, for a later phase.",
+        "reason": "benchmark_not_predeclared_for_root",
+        "root_symbol": "ZN"
+      }
+    ],
+    "phase": "13.5C",
+    "risk_assumptions": {
+      "cpp_reference_cli": "quant_backtest_targets_csv",
+      "hard_risk_limits_enforced": false,
+      "limitation": "Phase 08 MaxContractsRiskManager / hard risk limits are NOT wired into the Phase 13 / 13.5C CLI execution path; RiskConfig wiring is deferred to Phase 19 (pybind boundary). Every target is passed through unchanged. The candidate `size` is a small integer target (1) by construction.",
+      "risk_manager": "PassThroughRiskManager"
+    },
+    "roots": [
+      "ES",
+      "NQ",
+      "CL",
+      "GC",
+      "ZN"
+    ],
+    "schema_version": "phase-13-5c-candidate-manifest/1",
+    "trials": [
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "fast_horizon": 20,
+          "root_symbol": "ES",
+          "size": 1,
+          "slow_horizon": 120
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "tsmom",
+        "feature_fingerprints": [
+          "feat1:60ca013bad4cfc493d102b52b576f739532583752bda15d0b39640a771e0d3a0",
+          "feat1:211b6050277a59fdfa481f3b5182f322d64af3adc29e95b4d8bb2449af6487d7"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.tsmom",
+        "neighbour_fingerprints": [
+          "stratdsl1:79750b03e07a66a530f92f7edaaaf1ed20251b72b9d19bd7f3a49d3d7fd11607",
+          "stratdsl1:cdc69b67892cc505568fc2e3f6fe71ca2abba6a78e7971d0d44ca0344bf08f65",
+          "stratdsl1:999808395519263fe86636513096617622a3e0c39208e0fa8b69e029c53b536e",
+          "stratdsl1:aebe2d9772832d6055d41b067d01eac239426d7ce099bccaeb563a8e1a8d198a"
+        ],
+        "neighbour_params": [
+          {
+            "fast_horizon": 10,
+            "root_symbol": "ES",
+            "size": 1,
+            "slow_horizon": 120
+          },
+          {
+            "fast_horizon": 40,
+            "root_symbol": "ES",
+            "size": 1,
+            "slow_horizon": 120
+          },
+          {
+            "fast_horizon": 20,
+            "root_symbol": "ES",
+            "size": 1,
+            "slow_horizon": 90
+          },
+          {
+            "fast_horizon": 20,
+            "root_symbol": "ES",
+            "size": 1,
+            "slow_horizon": 180
+          }
+        ],
+        "root_symbol": "ES",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:a7456f2a8e2bea9142abbe4ab71db1935abe192d6c29a90220f329b4029cb732",
+        "strategy_id": "BASE-TSMOM-ES-20-120-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "fast_horizon": 20,
+          "root_symbol": "NQ",
+          "size": 1,
+          "slow_horizon": 120
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "tsmom",
+        "feature_fingerprints": [
+          "feat1:60ca013bad4cfc493d102b52b576f739532583752bda15d0b39640a771e0d3a0",
+          "feat1:211b6050277a59fdfa481f3b5182f322d64af3adc29e95b4d8bb2449af6487d7"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.tsmom",
+        "neighbour_fingerprints": [
+          "stratdsl1:5b6185baa05589126043c1f17afbb9bb7cf4cba81c3b1930dc75a02383c68984",
+          "stratdsl1:e603d933db75cc685b0f364629a799b3bd6f62532923dda1744cb8707dd6052e",
+          "stratdsl1:f3a3ac5212d01a524837d43b3af9a2c5083f5f98714b348af886097c23a07b19",
+          "stratdsl1:38ecd3d044d7d78bf31a89c355e0bcc05c31e09ca7c98e272579883706f9e2d8"
+        ],
+        "neighbour_params": [
+          {
+            "fast_horizon": 10,
+            "root_symbol": "NQ",
+            "size": 1,
+            "slow_horizon": 120
+          },
+          {
+            "fast_horizon": 40,
+            "root_symbol": "NQ",
+            "size": 1,
+            "slow_horizon": 120
+          },
+          {
+            "fast_horizon": 20,
+            "root_symbol": "NQ",
+            "size": 1,
+            "slow_horizon": 90
+          },
+          {
+            "fast_horizon": 20,
+            "root_symbol": "NQ",
+            "size": 1,
+            "slow_horizon": 180
+          }
+        ],
+        "root_symbol": "NQ",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:bc6ba445f95a6be2f10f7714592ef5115d232b917fda08e64e3bae0eeffc4089",
+        "strategy_id": "BASE-TSMOM-NQ-20-120-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "fast_horizon": 20,
+          "root_symbol": "CL",
+          "size": 1,
+          "slow_horizon": 120
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "tsmom",
+        "feature_fingerprints": [
+          "feat1:60ca013bad4cfc493d102b52b576f739532583752bda15d0b39640a771e0d3a0",
+          "feat1:211b6050277a59fdfa481f3b5182f322d64af3adc29e95b4d8bb2449af6487d7"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.tsmom",
+        "neighbour_fingerprints": [
+          "stratdsl1:70b90aa586a1d66c026ee05974e998040bfc491f26efb30f04a0d6badc05991b",
+          "stratdsl1:4f5b631c464271c67e3d99967e581bb69bd6a5067e32c56e4aca8bc4924aac75",
+          "stratdsl1:0be1c15da22211ae48fe22c9280b69a298a299e96d84613a5d81a897885893cd",
+          "stratdsl1:3dc84a8f65f3f6739e929b878d455bf8261e7234359973a8940e187034ec74d1"
+        ],
+        "neighbour_params": [
+          {
+            "fast_horizon": 10,
+            "root_symbol": "CL",
+            "size": 1,
+            "slow_horizon": 120
+          },
+          {
+            "fast_horizon": 40,
+            "root_symbol": "CL",
+            "size": 1,
+            "slow_horizon": 120
+          },
+          {
+            "fast_horizon": 20,
+            "root_symbol": "CL",
+            "size": 1,
+            "slow_horizon": 90
+          },
+          {
+            "fast_horizon": 20,
+            "root_symbol": "CL",
+            "size": 1,
+            "slow_horizon": 180
+          }
+        ],
+        "root_symbol": "CL",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:4015d5ca081263d4c3838e9d88a6836536a892dbd3eee7cc5bfbc49a645a88b1",
+        "strategy_id": "BASE-TSMOM-CL-20-120-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "fast_horizon": 20,
+          "root_symbol": "GC",
+          "size": 1,
+          "slow_horizon": 120
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "tsmom",
+        "feature_fingerprints": [
+          "feat1:60ca013bad4cfc493d102b52b576f739532583752bda15d0b39640a771e0d3a0",
+          "feat1:211b6050277a59fdfa481f3b5182f322d64af3adc29e95b4d8bb2449af6487d7"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.tsmom",
+        "neighbour_fingerprints": [
+          "stratdsl1:740878b96dafcbf6d57b7232270dc5202fcf9fdbd6ee21f0a178b15a9ca63a57",
+          "stratdsl1:4dd27865b5bf58b7775e6f9e62afeb6e9c6df312caa00f02724695dfabfaa161",
+          "stratdsl1:bee730d5fe637b62a07eebe1d13afe6940132775c7d989be978318ea1660cfdb",
+          "stratdsl1:56b32eb49c84ab9bdc9e7d6364a1772cbcab38b04ad4ae86f55e430722c0953f"
+        ],
+        "neighbour_params": [
+          {
+            "fast_horizon": 10,
+            "root_symbol": "GC",
+            "size": 1,
+            "slow_horizon": 120
+          },
+          {
+            "fast_horizon": 40,
+            "root_symbol": "GC",
+            "size": 1,
+            "slow_horizon": 120
+          },
+          {
+            "fast_horizon": 20,
+            "root_symbol": "GC",
+            "size": 1,
+            "slow_horizon": 90
+          },
+          {
+            "fast_horizon": 20,
+            "root_symbol": "GC",
+            "size": 1,
+            "slow_horizon": 180
+          }
+        ],
+        "root_symbol": "GC",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:474ec58a18ed70e933bfa3e7c7dbc44046fb812ff1be282f9841393083a950e1",
+        "strategy_id": "BASE-TSMOM-GC-20-120-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "fast_horizon": 20,
+          "root_symbol": "ZN",
+          "size": 1,
+          "slow_horizon": 120
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "tsmom",
+        "feature_fingerprints": [
+          "feat1:60ca013bad4cfc493d102b52b576f739532583752bda15d0b39640a771e0d3a0",
+          "feat1:211b6050277a59fdfa481f3b5182f322d64af3adc29e95b4d8bb2449af6487d7"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.tsmom",
+        "neighbour_fingerprints": [
+          "stratdsl1:f44cd044881cb2c0d020631340cce16d4465846c25a721c5bb72f7fac17e39f2",
+          "stratdsl1:a58c2dcf2e3d2cc0012df51c3fed1f74b47b7e7fafacd4732813d7ec03e4f8b3",
+          "stratdsl1:0593339020e3e7513bccf646b0dc6a1dc87b66e6d8f173d5b3fe5f18d1ad16c8",
+          "stratdsl1:2e67d3716fe5788812453099eefaded32755ca89fb6ac0b49265edfc27e2ee60"
+        ],
+        "neighbour_params": [
+          {
+            "fast_horizon": 10,
+            "root_symbol": "ZN",
+            "size": 1,
+            "slow_horizon": 120
+          },
+          {
+            "fast_horizon": 40,
+            "root_symbol": "ZN",
+            "size": 1,
+            "slow_horizon": 120
+          },
+          {
+            "fast_horizon": 20,
+            "root_symbol": "ZN",
+            "size": 1,
+            "slow_horizon": 90
+          },
+          {
+            "fast_horizon": 20,
+            "root_symbol": "ZN",
+            "size": 1,
+            "slow_horizon": 180
+          }
+        ],
+        "root_symbol": "ZN",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:17a8f7cd54b544453b4d9b33dc473a2d708d0ba0d184d8e0e9c30d79bdf475ad",
+        "strategy_id": "BASE-TSMOM-ZN-20-120-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "fast_window": 50,
+          "root_symbol": "ES",
+          "size": 1,
+          "slow_window": 200
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "ma_trend",
+        "feature_fingerprints": [
+          "feat1:7167d4415ce90ddb3fc09d0ac5e7d046d450f29188b8e017a7cd0cf0e8ce3e35",
+          "feat1:33da350f7b6144b5e7c79b51350141f26cb58f3ce65a630b31abd22f10c58462"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.ma_trend",
+        "neighbour_fingerprints": [
+          "stratdsl1:261271f7c8845e33b669bb2b35b991ddbde54736ae0ae9ce7afb077ad03b0d60",
+          "stratdsl1:8059247d0337514d9f97776a2b6bc5b2f0f28c2324447d4636131f3f4b0caa08",
+          "stratdsl1:90e7999a203b75ffd0acd449a0c20871e30fd35b338a73e3cf8d4ce4e0405301",
+          "stratdsl1:3a3407f943f588d5b82d43ea84b3d8e19e4edf42561bd506e4e8a9b6e6399d48"
+        ],
+        "neighbour_params": [
+          {
+            "fast_window": 25,
+            "root_symbol": "ES",
+            "size": 1,
+            "slow_window": 200
+          },
+          {
+            "fast_window": 75,
+            "root_symbol": "ES",
+            "size": 1,
+            "slow_window": 200
+          },
+          {
+            "fast_window": 50,
+            "root_symbol": "ES",
+            "size": 1,
+            "slow_window": 150
+          },
+          {
+            "fast_window": 50,
+            "root_symbol": "ES",
+            "size": 1,
+            "slow_window": 250
+          }
+        ],
+        "root_symbol": "ES",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:d8fb7f2924c274b1b06c1bae75d2c387667ea685a3baca2f74662b69e5b2610e",
+        "strategy_id": "BASE-MATREND-ES-50-200-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "fast_window": 50,
+          "root_symbol": "NQ",
+          "size": 1,
+          "slow_window": 200
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "ma_trend",
+        "feature_fingerprints": [
+          "feat1:7167d4415ce90ddb3fc09d0ac5e7d046d450f29188b8e017a7cd0cf0e8ce3e35",
+          "feat1:33da350f7b6144b5e7c79b51350141f26cb58f3ce65a630b31abd22f10c58462"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.ma_trend",
+        "neighbour_fingerprints": [
+          "stratdsl1:9b7a5c1b8221374e8d85ac1c7474804bbe80a34368d9f7ab6522f6d101452e6a",
+          "stratdsl1:1cb4b7e22f8596f0b33973b7e29ca05b554d99c96b8717a1bcb77e3b41f1ba47",
+          "stratdsl1:5da3d6459c46df5962d0342f6ad368fbe9c1db2c53e3641d23539bd384ef862f",
+          "stratdsl1:75e15f36007dcf15397512422a8d5ec55886491f52061d0007156cb60c863406"
+        ],
+        "neighbour_params": [
+          {
+            "fast_window": 25,
+            "root_symbol": "NQ",
+            "size": 1,
+            "slow_window": 200
+          },
+          {
+            "fast_window": 75,
+            "root_symbol": "NQ",
+            "size": 1,
+            "slow_window": 200
+          },
+          {
+            "fast_window": 50,
+            "root_symbol": "NQ",
+            "size": 1,
+            "slow_window": 150
+          },
+          {
+            "fast_window": 50,
+            "root_symbol": "NQ",
+            "size": 1,
+            "slow_window": 250
+          }
+        ],
+        "root_symbol": "NQ",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:fc9a5070b2e25716082cf5e77300271d5ea08af8020ae7c4b16f4b18352da2d7",
+        "strategy_id": "BASE-MATREND-NQ-50-200-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "fast_window": 50,
+          "root_symbol": "CL",
+          "size": 1,
+          "slow_window": 200
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "ma_trend",
+        "feature_fingerprints": [
+          "feat1:7167d4415ce90ddb3fc09d0ac5e7d046d450f29188b8e017a7cd0cf0e8ce3e35",
+          "feat1:33da350f7b6144b5e7c79b51350141f26cb58f3ce65a630b31abd22f10c58462"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.ma_trend",
+        "neighbour_fingerprints": [
+          "stratdsl1:088544884cb775c6441ee1e17b75d543d0b910130d222a343a4d2c3c6e8240ed",
+          "stratdsl1:7dc39af975ed243f83e513495b3df98c2dcc7d40b8bebfc94c9f9358d4715cc6",
+          "stratdsl1:918185fbf489aac79d1f3a4ed11af0edd9d324af249769c4740db24d6656fafe",
+          "stratdsl1:105bf2a741c7853dd64fa594a4c5ab5974fb9e955c5851ebff357856ab39f95c"
+        ],
+        "neighbour_params": [
+          {
+            "fast_window": 25,
+            "root_symbol": "CL",
+            "size": 1,
+            "slow_window": 200
+          },
+          {
+            "fast_window": 75,
+            "root_symbol": "CL",
+            "size": 1,
+            "slow_window": 200
+          },
+          {
+            "fast_window": 50,
+            "root_symbol": "CL",
+            "size": 1,
+            "slow_window": 150
+          },
+          {
+            "fast_window": 50,
+            "root_symbol": "CL",
+            "size": 1,
+            "slow_window": 250
+          }
+        ],
+        "root_symbol": "CL",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:e1e24cf8c492e1779e1bfbfe1e513d03d540c6493c0add19588b3bb5845b8f9a",
+        "strategy_id": "BASE-MATREND-CL-50-200-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "fast_window": 50,
+          "root_symbol": "GC",
+          "size": 1,
+          "slow_window": 200
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "ma_trend",
+        "feature_fingerprints": [
+          "feat1:7167d4415ce90ddb3fc09d0ac5e7d046d450f29188b8e017a7cd0cf0e8ce3e35",
+          "feat1:33da350f7b6144b5e7c79b51350141f26cb58f3ce65a630b31abd22f10c58462"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.ma_trend",
+        "neighbour_fingerprints": [
+          "stratdsl1:1b2da12d029ee67272d735e4dfbd10ad950691fb33246ece4895d88e9ce390a2",
+          "stratdsl1:34466a16b892ed39ec8fc433201f85838b35f23bf7dac086df28656bf245ae7c",
+          "stratdsl1:9cf363a8376fd6e4e68001b246e94666f7837bac11234a38586df521dc920568",
+          "stratdsl1:4f32a8d453e206c15e64b2870e9491ece93a512f67bae27ad4fa2cbecc686c82"
+        ],
+        "neighbour_params": [
+          {
+            "fast_window": 25,
+            "root_symbol": "GC",
+            "size": 1,
+            "slow_window": 200
+          },
+          {
+            "fast_window": 75,
+            "root_symbol": "GC",
+            "size": 1,
+            "slow_window": 200
+          },
+          {
+            "fast_window": 50,
+            "root_symbol": "GC",
+            "size": 1,
+            "slow_window": 150
+          },
+          {
+            "fast_window": 50,
+            "root_symbol": "GC",
+            "size": 1,
+            "slow_window": 250
+          }
+        ],
+        "root_symbol": "GC",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:a6c8d87026a50d7473c445dcf2cb81e68d3106d8806800176abad2a7a5040f94",
+        "strategy_id": "BASE-MATREND-GC-50-200-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "fast_window": 50,
+          "root_symbol": "ZN",
+          "size": 1,
+          "slow_window": 200
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "ma_trend",
+        "feature_fingerprints": [
+          "feat1:7167d4415ce90ddb3fc09d0ac5e7d046d450f29188b8e017a7cd0cf0e8ce3e35",
+          "feat1:33da350f7b6144b5e7c79b51350141f26cb58f3ce65a630b31abd22f10c58462"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.ma_trend",
+        "neighbour_fingerprints": [
+          "stratdsl1:8c967a46e688ae16e041fd8264f031abe54d57f47134a4d359c6e93de808ac8f",
+          "stratdsl1:4baf07036d6110c9d5b865fdfa195ae37e943d3df7ba57c7548e19bf29c656a7",
+          "stratdsl1:32a968c77dba25dcdc9afc5f9353277f98640f538cd6a35aca48268cdf371493",
+          "stratdsl1:7834f9fba70f94fd84fec25c6e26ce67d4d8b82ea84c87d85486699061c3bb5a"
+        ],
+        "neighbour_params": [
+          {
+            "fast_window": 25,
+            "root_symbol": "ZN",
+            "size": 1,
+            "slow_window": 200
+          },
+          {
+            "fast_window": 75,
+            "root_symbol": "ZN",
+            "size": 1,
+            "slow_window": 200
+          },
+          {
+            "fast_window": 50,
+            "root_symbol": "ZN",
+            "size": 1,
+            "slow_window": 150
+          },
+          {
+            "fast_window": 50,
+            "root_symbol": "ZN",
+            "size": 1,
+            "slow_window": 250
+          }
+        ],
+        "root_symbol": "ZN",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:a754b52922d8b4c5d6e60d373165d1e226769cfc9dd47d2c8f641ed668b7ad91",
+        "strategy_id": "BASE-MATREND-ZN-50-200-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "lookback": 55,
+          "root_symbol": "ES",
+          "size": 1
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "breakout",
+        "feature_fingerprints": [
+          "feat1:002de94f0ee8680ef234985ec8316251206774bc5ebb838b4e6e9f1d9440d91b",
+          "feat1:129cb6d18516e94d899e3670359f13b1737c7ec0b301ce76bc19bdb09475df25"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.breakout",
+        "neighbour_fingerprints": [
+          "stratdsl1:8c0f1f1ec25887a62fa47cf52d9b361734cf749d096a52de3cc786759ce87578",
+          "stratdsl1:7f1b5c4b72ac2dbff66c5a2b39a0bf5414d74eec54de4540a5010625c7bd5b69"
+        ],
+        "neighbour_params": [
+          {
+            "lookback": 35,
+            "root_symbol": "ES",
+            "size": 1
+          },
+          {
+            "lookback": 85,
+            "root_symbol": "ES",
+            "size": 1
+          }
+        ],
+        "root_symbol": "ES",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:015bfb757884fa50efa314ed57ab206afe9c43a1f146fd6c1e8828bc5e320df5",
+        "strategy_id": "BASE-BREAKOUT-ES-55-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "lookback": 55,
+          "root_symbol": "NQ",
+          "size": 1
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "breakout",
+        "feature_fingerprints": [
+          "feat1:002de94f0ee8680ef234985ec8316251206774bc5ebb838b4e6e9f1d9440d91b",
+          "feat1:129cb6d18516e94d899e3670359f13b1737c7ec0b301ce76bc19bdb09475df25"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.breakout",
+        "neighbour_fingerprints": [
+          "stratdsl1:3363a1dc4345cfeb33a8b591561d151fa63c25415cbdd3b04e164146455dda31",
+          "stratdsl1:ca6c4bef4c2f7964ab121c420a969d9b5c32760f9607b626dc5fe2d25d995110"
+        ],
+        "neighbour_params": [
+          {
+            "lookback": 35,
+            "root_symbol": "NQ",
+            "size": 1
+          },
+          {
+            "lookback": 85,
+            "root_symbol": "NQ",
+            "size": 1
+          }
+        ],
+        "root_symbol": "NQ",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:f3bdae340058418f0b9ac527ac24916c26338b00ec1f8f3528446e51613e8ce4",
+        "strategy_id": "BASE-BREAKOUT-NQ-55-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "lookback": 55,
+          "root_symbol": "CL",
+          "size": 1
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "breakout",
+        "feature_fingerprints": [
+          "feat1:002de94f0ee8680ef234985ec8316251206774bc5ebb838b4e6e9f1d9440d91b",
+          "feat1:129cb6d18516e94d899e3670359f13b1737c7ec0b301ce76bc19bdb09475df25"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.breakout",
+        "neighbour_fingerprints": [
+          "stratdsl1:3ecc86156bb46336f8824d20c90a3346ec25167417f65d8f52c5237ec81b38f5",
+          "stratdsl1:7fc8b0395cd0114e7a5ed2b1038ce6d27249fa59299e08f53e4be954f08becf8"
+        ],
+        "neighbour_params": [
+          {
+            "lookback": 35,
+            "root_symbol": "CL",
+            "size": 1
+          },
+          {
+            "lookback": 85,
+            "root_symbol": "CL",
+            "size": 1
+          }
+        ],
+        "root_symbol": "CL",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:03c1dddc1dae7c5d5bdab3e42cb6a6eff8cb62be91e3457bd70a49ac76aaed22",
+        "strategy_id": "BASE-BREAKOUT-CL-55-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "lookback": 55,
+          "root_symbol": "GC",
+          "size": 1
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "breakout",
+        "feature_fingerprints": [
+          "feat1:002de94f0ee8680ef234985ec8316251206774bc5ebb838b4e6e9f1d9440d91b",
+          "feat1:129cb6d18516e94d899e3670359f13b1737c7ec0b301ce76bc19bdb09475df25"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.breakout",
+        "neighbour_fingerprints": [
+          "stratdsl1:b9e11f095c0f57e209a6d64674e7e4d040a2b98627812d61aea969a8b89012c7",
+          "stratdsl1:a953382330e0ede68857ddb77794707255e48806d2d4b10371f7774ea408953a"
+        ],
+        "neighbour_params": [
+          {
+            "lookback": 35,
+            "root_symbol": "GC",
+            "size": 1
+          },
+          {
+            "lookback": 85,
+            "root_symbol": "GC",
+            "size": 1
+          }
+        ],
+        "root_symbol": "GC",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:edf4af15a05ffbd121b561dd1766b0f70e98fa09c8f15c488b520aa3a8095d60",
+        "strategy_id": "BASE-BREAKOUT-GC-55-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "lookback": 55,
+          "root_symbol": "ZN",
+          "size": 1
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "breakout",
+        "feature_fingerprints": [
+          "feat1:002de94f0ee8680ef234985ec8316251206774bc5ebb838b4e6e9f1d9440d91b",
+          "feat1:129cb6d18516e94d899e3670359f13b1737c7ec0b301ce76bc19bdb09475df25"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.breakout",
+        "neighbour_fingerprints": [
+          "stratdsl1:e696643fcc11f3fd094ec6fa3e0531df6f003a86a1e42ae0f4c964c4f78af687",
+          "stratdsl1:606ba6b178fca7c7fc4bcc7a1c1d68a8d4c4268711e1e12ccbfd1ce9928b766c"
+        ],
+        "neighbour_params": [
+          {
+            "lookback": 35,
+            "root_symbol": "ZN",
+            "size": 1
+          },
+          {
+            "lookback": 85,
+            "root_symbol": "ZN",
+            "size": 1
+          }
+        ],
+        "root_symbol": "ZN",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:f2c01015fb775ed20e0557feba67390729207038ff9b4062d6eba09d0cd5e98d",
+        "strategy_id": "BASE-BREAKOUT-ZN-55-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "entry_z": 2.0,
+          "exit_z": 0.5,
+          "root_symbol": "ES",
+          "size": 1,
+          "zscore_window": 20
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "mean_reversion",
+        "feature_fingerprints": [
+          "feat1:f17218b069d8c7a3e27cc2b85b58a75f6c50dc2fcb5c210bbbfa007b7b7bfa5b"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.mean_reversion",
+        "neighbour_fingerprints": [
+          "stratdsl1:19657fcf72c69706fdab6bf895a2ae7a2e4419408d349685cc5670c47b0bffe3",
+          "stratdsl1:14ba440887ace4b18bf272e7bae5b6ebc2a81a56bed46f6d873e9a11936c61e7",
+          "stratdsl1:7523ccb7f69b1ce1516fe75d1fd7e35825e9a11269bb73397b87608f6e771dbd",
+          "stratdsl1:4ab4f7d3d2f5c27e08612171537d10fa6b031275b8dc4d783f4bc60d9d033449",
+          "stratdsl1:963764deef84f77b6118a0c54640cb34ce166aebc027effcee8ab5c6b689468d",
+          "stratdsl1:9f7176d1c18cb4c66e8840bb4da6293a19f3fb9511e5a0b7b7e25eca63c1b206"
+        ],
+        "neighbour_params": [
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.5,
+            "root_symbol": "ES",
+            "size": 1,
+            "zscore_window": 15
+          },
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.5,
+            "root_symbol": "ES",
+            "size": 1,
+            "zscore_window": 30
+          },
+          {
+            "entry_z": 1.5,
+            "exit_z": 0.5,
+            "root_symbol": "ES",
+            "size": 1,
+            "zscore_window": 20
+          },
+          {
+            "entry_z": 2.5,
+            "exit_z": 0.5,
+            "root_symbol": "ES",
+            "size": 1,
+            "zscore_window": 20
+          },
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.25,
+            "root_symbol": "ES",
+            "size": 1,
+            "zscore_window": 20
+          },
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.75,
+            "root_symbol": "ES",
+            "size": 1,
+            "zscore_window": 20
+          }
+        ],
+        "root_symbol": "ES",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:6339b3136e078f568c33994539a7abb4a940ad821de0070ac4925eca96a5b73b",
+        "strategy_id": "BASE-MEANREV-ES-20-2-0.5-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "entry_z": 2.0,
+          "exit_z": 0.5,
+          "root_symbol": "NQ",
+          "size": 1,
+          "zscore_window": 20
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "mean_reversion",
+        "feature_fingerprints": [
+          "feat1:f17218b069d8c7a3e27cc2b85b58a75f6c50dc2fcb5c210bbbfa007b7b7bfa5b"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.mean_reversion",
+        "neighbour_fingerprints": [
+          "stratdsl1:7fdeaaac33eff62322bc719fc4f11a2863c69fecbb0d3fbac30eb07789adbfa8",
+          "stratdsl1:0839eae17e595e64d0fa19707a8e3d6823c0836ac63a2d323f7d6b4754f6f97e",
+          "stratdsl1:3d9a9942d716e43949cbed6b7a7399e47566c8b423f851f17ce4427064895ef6",
+          "stratdsl1:2bb4b9dc143b4d95c4a998757eec6bc4c226d852ccbb4b82c6b9e43d0c71a8d2",
+          "stratdsl1:db8ad03a2067f9b1a8889bf3f00fba53794bf0f40c12a890c6f4042d53189b7b",
+          "stratdsl1:824b9b4c234627815d92d3c07103218f336fbce8d5095de11b3132c4b2a68f5c"
+        ],
+        "neighbour_params": [
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.5,
+            "root_symbol": "NQ",
+            "size": 1,
+            "zscore_window": 15
+          },
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.5,
+            "root_symbol": "NQ",
+            "size": 1,
+            "zscore_window": 30
+          },
+          {
+            "entry_z": 1.5,
+            "exit_z": 0.5,
+            "root_symbol": "NQ",
+            "size": 1,
+            "zscore_window": 20
+          },
+          {
+            "entry_z": 2.5,
+            "exit_z": 0.5,
+            "root_symbol": "NQ",
+            "size": 1,
+            "zscore_window": 20
+          },
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.25,
+            "root_symbol": "NQ",
+            "size": 1,
+            "zscore_window": 20
+          },
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.75,
+            "root_symbol": "NQ",
+            "size": 1,
+            "zscore_window": 20
+          }
+        ],
+        "root_symbol": "NQ",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:071ba403aee2ba758eeab8d671685113b2cedb96b85835f1a0fa92113ded3e92",
+        "strategy_id": "BASE-MEANREV-NQ-20-2-0.5-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "entry_z": 2.0,
+          "exit_z": 0.5,
+          "root_symbol": "CL",
+          "size": 1,
+          "zscore_window": 20
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "mean_reversion",
+        "feature_fingerprints": [
+          "feat1:f17218b069d8c7a3e27cc2b85b58a75f6c50dc2fcb5c210bbbfa007b7b7bfa5b"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.mean_reversion",
+        "neighbour_fingerprints": [
+          "stratdsl1:ffbe99cc0b318a6e9e748b5f23ea6a6b6905b34c8cc25e62d2e0cf2d07302e1d",
+          "stratdsl1:14b94fc2e2abb8cf3013a7c528f66156418b27eeac13e6d5bf2b55cb853a5eed",
+          "stratdsl1:9676e639a720be7182047cc4bcf17aee1b03ca53e89395bc9d52f46b5c9b4564",
+          "stratdsl1:5fbd4a10fd94805f8d6ee239749dab1762b2c4ad5ad097d4aa66d99dc667c721",
+          "stratdsl1:7335fc9f5bb82fb158b8a9ac81ae4e0cbc1024e3ffbc53f2c1ae973225e3820d",
+          "stratdsl1:b41665ecb9f2ab00541eb6db9ca0d02b24a8c5737dd291e3aecd49e27f5b37a0"
+        ],
+        "neighbour_params": [
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.5,
+            "root_symbol": "CL",
+            "size": 1,
+            "zscore_window": 15
+          },
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.5,
+            "root_symbol": "CL",
+            "size": 1,
+            "zscore_window": 30
+          },
+          {
+            "entry_z": 1.5,
+            "exit_z": 0.5,
+            "root_symbol": "CL",
+            "size": 1,
+            "zscore_window": 20
+          },
+          {
+            "entry_z": 2.5,
+            "exit_z": 0.5,
+            "root_symbol": "CL",
+            "size": 1,
+            "zscore_window": 20
+          },
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.25,
+            "root_symbol": "CL",
+            "size": 1,
+            "zscore_window": 20
+          },
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.75,
+            "root_symbol": "CL",
+            "size": 1,
+            "zscore_window": 20
+          }
+        ],
+        "root_symbol": "CL",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:6a42edb49a9366e838e8a03230430074fc81e7fd8c0571f32bda4c1c955b7aa2",
+        "strategy_id": "BASE-MEANREV-CL-20-2-0.5-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "entry_z": 2.0,
+          "exit_z": 0.5,
+          "root_symbol": "GC",
+          "size": 1,
+          "zscore_window": 20
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "mean_reversion",
+        "feature_fingerprints": [
+          "feat1:f17218b069d8c7a3e27cc2b85b58a75f6c50dc2fcb5c210bbbfa007b7b7bfa5b"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.mean_reversion",
+        "neighbour_fingerprints": [
+          "stratdsl1:11a1c455a035895e18c2439e32beaa19ad2c5a23b84676ade27bca3ac56b04c3",
+          "stratdsl1:6d535b659366782b8c38b16a0ad08cb180b630dee1c97e96b4fed9f09c00ed95",
+          "stratdsl1:f3da5d310cefd4f6347fa1fa6671196cd75533e684dde677e92a83ead3e9fe1d",
+          "stratdsl1:bcfa7cac67bcf62b4bfea636564f5129907f703e5ff5c3279a00a21fd1ac9804",
+          "stratdsl1:7ab62ba4f78481c27b44ca8e853f12b9697cfffc17297dee4d220d044f9ac1b2",
+          "stratdsl1:4e11d7c772ef9669435b118919e6fe3ee0b6116f0849e078e63bb4d26c180e88"
+        ],
+        "neighbour_params": [
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.5,
+            "root_symbol": "GC",
+            "size": 1,
+            "zscore_window": 15
+          },
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.5,
+            "root_symbol": "GC",
+            "size": 1,
+            "zscore_window": 30
+          },
+          {
+            "entry_z": 1.5,
+            "exit_z": 0.5,
+            "root_symbol": "GC",
+            "size": 1,
+            "zscore_window": 20
+          },
+          {
+            "entry_z": 2.5,
+            "exit_z": 0.5,
+            "root_symbol": "GC",
+            "size": 1,
+            "zscore_window": 20
+          },
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.25,
+            "root_symbol": "GC",
+            "size": 1,
+            "zscore_window": 20
+          },
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.75,
+            "root_symbol": "GC",
+            "size": 1,
+            "zscore_window": 20
+          }
+        ],
+        "root_symbol": "GC",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:d29d540142e140912714875867bbe01e6c498efe2f6c334e822d89c329d0bf40",
+        "strategy_id": "BASE-MEANREV-GC-20-2-0.5-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "entry_z": 2.0,
+          "exit_z": 0.5,
+          "root_symbol": "ZN",
+          "size": 1,
+          "zscore_window": 20
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "mean_reversion",
+        "feature_fingerprints": [
+          "feat1:f17218b069d8c7a3e27cc2b85b58a75f6c50dc2fcb5c210bbbfa007b7b7bfa5b"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.mean_reversion",
+        "neighbour_fingerprints": [
+          "stratdsl1:eac344921ae9443373245792a0fd849e1b7109b4dfe93fe94e5cd510fdb9c92a",
+          "stratdsl1:034ac036ee5762d6515104fd495f3ce72cbe5122631ebb556c787ed4f6912e5f",
+          "stratdsl1:f8d3cafcdfa2fcc2fe375ccec60d604d49146093eb11939e80a0457a321841ef",
+          "stratdsl1:5a9a62ccd592b805551559571aa75d48e9cec0535efa19284414826250a0508f",
+          "stratdsl1:39c3dcc3c6945c40945a72a78b0b93f18bf1455a37bb1c5756f209e3a041b47f",
+          "stratdsl1:e522c629628f1cd9c95e917ddcb39df5a86b98c10cf4163e03fb27dbcbd08788"
+        ],
+        "neighbour_params": [
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.5,
+            "root_symbol": "ZN",
+            "size": 1,
+            "zscore_window": 15
+          },
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.5,
+            "root_symbol": "ZN",
+            "size": 1,
+            "zscore_window": 30
+          },
+          {
+            "entry_z": 1.5,
+            "exit_z": 0.5,
+            "root_symbol": "ZN",
+            "size": 1,
+            "zscore_window": 20
+          },
+          {
+            "entry_z": 2.5,
+            "exit_z": 0.5,
+            "root_symbol": "ZN",
+            "size": 1,
+            "zscore_window": 20
+          },
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.25,
+            "root_symbol": "ZN",
+            "size": 1,
+            "zscore_window": 20
+          },
+          {
+            "entry_z": 2.0,
+            "exit_z": 0.75,
+            "root_symbol": "ZN",
+            "size": 1,
+            "zscore_window": 20
+          }
+        ],
+        "root_symbol": "ZN",
+        "signal_cadence": "daily_trading_day",
+        "strategy_fingerprint": "stratdsl1:d395b20af499a47784ada79b483609158a0eed4ace68dedc0c7d5780aab4a6ee",
+        "strategy_id": "BASE-MEANREV-ZN-20-2-0.5-1"
+      },
+      {
+        "applicability": "EVALUATED",
+        "applicability_reason": "",
+        "canonical_params": {
+          "displacement_atr_multiple": 1.5,
+          "displacement_atr_window": 14,
+          "displacement_close_loc": 0.6,
+          "distance_unit": "price_units",
+          "fvg_min_width": 0.0,
+          "liquidity_lookback": 20,
+          "liquidity_reference": "rolling_nbar_extreme",
+          "max_holding_bars": 24,
+          "retracement_fraction": 0.5,
+          "root_symbol": "NQ",
+          "setup_expiry_bars": 12,
+          "size": 1,
+          "sweep_penetration": 0.0,
+          "tick_size": 0.0,
+          "window_calendar": "NQ",
+          "window_end_local": "10:00",
+          "window_start_local": "09:00"
+        },
+        "execution_cadence": "native_1m_raw_contract",
+        "family_key": "silver_bullet",
+        "feature_fingerprints": [
+          "feat1:0f7c550f55d054f68313daa953f4ead35d54ae5b85199bd83dcd2971ad81cf5e"
+        ],
+        "multiple_testing_family_id": "phase_13_5c.silver_bullet",
+        "neighbour_fingerprints": [
+          "stratdsl1:a2b3053c9dac6cdf05ee72bf6db60dac6c45817e64ef68f0908070a7fa660a8d",
+          "stratdsl1:4aa43c31856b3a4aa7ee6425818e7f0e2889483540c39273df52c6b530e732ae",
+          "stratdsl1:563419a50df3f9d90181470b492066eb6046648b7ae3e26b21e05b004b9f9668",
+          "stratdsl1:11959cca4f62cb89aa116c7d74bdf4c419dc2e5d3e7c6d0a6f7539800c2f5538",
+          "stratdsl1:d15d1d37d95627c4dee58ce7bdb298e616a00d8c76ef2159330171fe1e03adf8",
+          "stratdsl1:a4a23a0e06bb978576bda8f964464cd30d69dc8a0820bc5374a24126e1f4ac5c"
+        ],
+        "neighbour_params": [
+          {
+            "displacement_atr_multiple": 1.25,
+            "displacement_atr_window": 14,
+            "displacement_close_loc": 0.6,
+            "distance_unit": "price_units",
+            "fvg_min_width": 0.0,
+            "liquidity_lookback": 20,
+            "liquidity_reference": "rolling_nbar_extreme",
+            "max_holding_bars": 24,
+            "retracement_fraction": 0.5,
+            "root_symbol": "NQ",
+            "setup_expiry_bars": 12,
+            "size": 1,
+            "sweep_penetration": 0.0,
+            "tick_size": 0.0,
+            "window_calendar": "NQ",
+            "window_end_local": "10:00",
+            "window_start_local": "09:00"
+          },
+          {
+            "displacement_atr_multiple": 2.0,
+            "displacement_atr_window": 14,
+            "displacement_close_loc": 0.6,
+            "distance_unit": "price_units",
+            "fvg_min_width": 0.0,
+            "liquidity_lookback": 20,
+            "liquidity_reference": "rolling_nbar_extreme",
+            "max_holding_bars": 24,
+            "retracement_fraction": 0.5,
+            "root_symbol": "NQ",
+            "setup_expiry_bars": 12,
+            "size": 1,
+            "sweep_penetration": 0.0,
+            "tick_size": 0.0,
+            "window_calendar": "NQ",
+            "window_end_local": "10:00",
+            "window_start_local": "09:00"
+          },
+          {
+            "displacement_atr_multiple": 1.5,
+            "displacement_atr_window": 14,
+            "displacement_close_loc": 0.6,
+            "distance_unit": "price_units",
+            "fvg_min_width": 0.0,
+            "liquidity_lookback": 20,
+            "liquidity_reference": "rolling_nbar_extreme",
+            "max_holding_bars": 24,
+            "retracement_fraction": 0.3,
+            "root_symbol": "NQ",
+            "setup_expiry_bars": 12,
+            "size": 1,
+            "sweep_penetration": 0.0,
+            "tick_size": 0.0,
+            "window_calendar": "NQ",
+            "window_end_local": "10:00",
+            "window_start_local": "09:00"
+          },
+          {
+            "displacement_atr_multiple": 1.5,
+            "displacement_atr_window": 14,
+            "displacement_close_loc": 0.6,
+            "distance_unit": "price_units",
+            "fvg_min_width": 0.0,
+            "liquidity_lookback": 20,
+            "liquidity_reference": "rolling_nbar_extreme",
+            "max_holding_bars": 24,
+            "retracement_fraction": 0.7,
+            "root_symbol": "NQ",
+            "setup_expiry_bars": 12,
+            "size": 1,
+            "sweep_penetration": 0.0,
+            "tick_size": 0.0,
+            "window_calendar": "NQ",
+            "window_end_local": "10:00",
+            "window_start_local": "09:00"
+          },
+          {
+            "displacement_atr_multiple": 1.5,
+            "displacement_atr_window": 14,
+            "displacement_close_loc": 0.6,
+            "distance_unit": "price_units",
+            "fvg_min_width": 0.0,
+            "liquidity_lookback": 15,
+            "liquidity_reference": "rolling_nbar_extreme",
+            "max_holding_bars": 24,
+            "retracement_fraction": 0.5,
+            "root_symbol": "NQ",
+            "setup_expiry_bars": 12,
+            "size": 1,
+            "sweep_penetration": 0.0,
+            "tick_size": 0.0,
+            "window_calendar": "NQ",
+            "window_end_local": "10:00",
+            "window_start_local": "09:00"
+          },
+          {
+            "displacement_atr_multiple": 1.5,
+            "displacement_atr_window": 14,
+            "displacement_close_loc": 0.6,
+            "distance_unit": "price_units",
+            "fvg_min_width": 0.0,
+            "liquidity_lookback": 30,
+            "liquidity_reference": "rolling_nbar_extreme",
+            "max_holding_bars": 24,
+            "retracement_fraction": 0.5,
+            "root_symbol": "NQ",
+            "setup_expiry_bars": 12,
+            "size": 1,
+            "sweep_penetration": 0.0,
+            "tick_size": 0.0,
+            "window_calendar": "NQ",
+            "window_end_local": "10:00",
+            "window_start_local": "09:00"
+          }
+        ],
+        "root_symbol": "NQ",
+        "signal_cadence": "native_1m",
+        "strategy_fingerprint": "stratdsl1:a15505072b075bb6547014b0cc0860e99ae8ac87dbd26582aafb1d5733ed77b6",
+        "strategy_id": "SB-NQ-L20-D1.5-R0.5-1"
+      }
+    ]
+  },
+  "manifest_fingerprint": "p135c-manifest:2b50a618425d9109ae1fb7fbec41410aceece56f15508ed2d9ec86fa3289bb8d",
+  "n_canonical_trials": 21
+}

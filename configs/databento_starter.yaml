@@ -1,0 +1,12 @@
+# Deliberately small first request. Estimate cost before download.
+dataset: GLBX.MDP3
+schema: ohlcv-1m
+stype_in: continuous
+symbols:
+  - NQ.v.0
+start: "2026-08-03"
+end: "2026-08-04"
+max_cost_usd: 1.00
+
+# Later, after the pipeline is verified, add ES/CL/GC/ZN and longer history.
+# Do not use parent symbols for a broad historical request without estimating cost first.

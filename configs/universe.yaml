@@ -1,0 +1,26 @@
+universe:
+  - root: ES
+    parent_symbol: ES.FUT
+    continuous_volume_front: ES.v.0
+    asset_class: equity_index
+  - root: NQ
+    parent_symbol: NQ.FUT
+    continuous_volume_front: NQ.v.0
+    asset_class: equity_index
+  - root: CL
+    parent_symbol: CL.FUT
+    continuous_volume_front: CL.v.0
+    asset_class: energy
+  - root: GC
+    parent_symbol: GC.FUT
+    continuous_volume_front: GC.v.0
+    asset_class: metals
+  - root: ZN
+    parent_symbol: ZN.FUT
+    continuous_volume_front: ZN.v.0
+    asset_class: rates
+
+databento:
+  dataset: GLBX.MDP3
+  default_schema: ohlcv-1m
+  default_stype_in: continuous

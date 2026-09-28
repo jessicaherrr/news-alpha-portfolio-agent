@@ -1,0 +1,29 @@
+{
+  "calendar_identity": "2026-09-phase04",
+  "canonicalization_version": "1.0",
+  "code_commit": "06ac9db",
+  "component_kind": "instrument_definitions",
+  "contract_definition_identity": "defs:dceea07aac973f0a",
+  "databento_schema": "definition",
+  "dataset": "GLBX.MDP3",
+  "download_cost_usd": 0.001912500709,
+  "downloaded_at": "2026-09-08T06:48:53.482433+00:00",
+  "end": "2024-01-05",
+  "ingestion_version": "databento-source/1",
+  "price_domain": "n/a",
+  "query_identity": "dbnq1:9d81ae86e6c06d7ffe6293cc",
+  "raw_artifact_relpath": "data/raw/databento/GLBX.MDP3/definition/6a5ef1dae5f66193/definition.dbn.zst",
+  "raw_or_continuous_role": "definitions",
+  "raw_sha256": "68678f52869e2e336ced562fc17cec1c65f74bafd0bccca82396898a1156b2d2",
+  "root_symbol": "GC",
+  "row_count": 2323,
+  "schema_version": "real-dataset/1",
+  "split_role": "validation",
+  "start": "2024-01-01",
+  "stype_in": "parent",
+  "stype_out": "instrument_id",
+  "symbol_request": [
+    "GC.FUT"
+  ],
+  "vendor": "databento"
+}

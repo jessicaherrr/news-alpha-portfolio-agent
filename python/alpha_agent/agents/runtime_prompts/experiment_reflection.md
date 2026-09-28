@@ -1,0 +1,1 @@
+Given a completed experiment, explain what was learned and propose at most three materially different next hypotheses. Reference failed mechanisms so the system does not repeat near-duplicates. Do not inspect or request locked holdout data.

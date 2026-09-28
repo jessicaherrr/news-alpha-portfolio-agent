@@ -1,0 +1,303 @@
+{
+  "candidate_manifest_fingerprint": "p15manifest1:7a4ef8a9633bd3f18b982421baf9903b60b857f05fc618de5cd130b9718227ec",
+  "candidate_manifest_path": "data/manifests/phase_15/ml_candidate_manifest_identity_corrected.json",
+  "candidate_manifest_schema_version": "phase-15-ml-candidate-manifest/3",
+  "code_commit": "f7d421dbadbe64f8c0497f53a477e273ab8a7f37",
+  "generated_at": "2026-09-09T19:44:50.401153+00:00",
+  "identity_planes": {
+    "planes": {
+      "cost_config_identity": "costconfig1:7ad0adc13a84045cfde2d02fe55115c52b0aa4ee79ecf8942b1b947fcdf6e7fd",
+      "dataset_fingerprint": "mldatasetplane1:95716bd0928cae7947bc0cde51a96c10aadd1cb50373177cb50826d487e4b910",
+      "execution_config_identity": "execconfig1:5b89fcc1038c02d7171e856a8da737af39830fd2d7a94c70f40dae7c51359fbc",
+      "reliability_policy_fingerprint": "valreliabilitypolicy1:b0682e86917c7b84550dc4d578926b8724fc95e18edb035242241ea008ec3705",
+      "risk_identity": "riskconfig1:a24167a3fccbf206eec000ee1abf8d2cb3db1f30520064a26e3e332ed128ef55",
+      "validation_spec_fingerprint": "mlvalidationspec1:bfbd460ce9cc1c3b6a7c1ec06d376033e3fa230504b9d3920d90ed5e6eb2807a"
+    },
+    "provenance": {
+      "cost_config_identity": {
+        "kind": "Phase 13.5C cost plane, unchanged",
+        "source_artifacts": [
+          "data/manifests/phase_13_5c/candidate_manifest.json"
+        ]
+      },
+      "dataset_fingerprint": {
+        "corpus_end_ts_ns": 1735689600000000000,
+        "corpus_start_ts_ns": 1514764800000000000,
+        "kind": "POOLED Phase 13.5C per-root dataset identities, unchanged",
+        "note": "Phase 13.5C execution bars span the corpus recorded above -- from 2018-01-01 up to the exclusive locked-holdout boundary -- which is exactly the PHASE_15_DEVELOPMENT_CORPUS, so each per-root identity is the Phase 13.5C one unchanged. Pooling records that a Phase 15 model is trained over all five roots at once.",
+        "per_root": {
+          "CL": "valdataset2:fd2eb277194c27ce2d4a17c5a3b79cbb7b12adf7d316aa095cbf606791a80122",
+          "ES": "valdataset2:dc17c39620f1a6dae79f5b3f7888a3e87246c028f9fd8a6ab40660eb9dafcc74",
+          "GC": "valdataset2:d8feb50a5f7410d8efa4aa8a8b8106ab0e91e124b36690946952d6fa3d5bf613",
+          "NQ": "valdataset2:6b36758e6a8416639d8ea5c9c8d58efddba85f6a76f89b9ac49963b4ca49588e",
+          "ZN": "valdataset2:bbba9ad2f9963a8cbf90e526a09b0009f7d2f38ca753bd08690142446cc36e41"
+        },
+        "source_artifacts": [
+          "outputs/phase_13_5c/CL__TSMOM__validation_report.json",
+          "outputs/phase_13_5c/CL__MA_TREND__validation_report.json",
+          "outputs/phase_13_5c/CL__BREAKOUT__validation_report.json",
+          "outputs/phase_13_5c/CL__MEAN_REVERSION__validation_report.json",
+          "outputs/phase_13_5c/ES__TSMOM__validation_report.json",
+          "outputs/phase_13_5c/ES__MA_TREND__validation_report.json",
+          "outputs/phase_13_5c/ES__BREAKOUT__validation_report.json",
+          "outputs/phase_13_5c/ES__MEAN_REVERSION__validation_report.json",
+          "outputs/phase_13_5c/GC__TSMOM__validation_report.json",
+          "outputs/phase_13_5c/GC__MA_TREND__validation_report.json",
+          "outputs/phase_13_5c/GC__BREAKOUT__validation_report.json",
+          "outputs/phase_13_5c/GC__MEAN_REVERSION__validation_report.json",
+          "outputs/phase_13_5c/NQ__TSMOM__validation_report.json",
+          "outputs/phase_13_5c/NQ__MA_TREND__validation_report.json",
+          "outputs/phase_13_5c/NQ__BREAKOUT__validation_report.json",
+          "outputs/phase_13_5c/NQ__MEAN_REVERSION__validation_report.json",
+          "outputs/phase_13_5c/ZN__TSMOM__validation_report.json",
+          "outputs/phase_13_5c/ZN__MA_TREND__validation_report.json",
+          "outputs/phase_13_5c/ZN__BREAKOUT__validation_report.json",
+          "outputs/phase_13_5c/ZN__MEAN_REVERSION__validation_report.json"
+        ]
+      },
+      "execution_config_identity": {
+        "kind": "Phase 13.5C corrected execution plane, unchanged",
+        "source_artifacts": [
+          "data/manifests/phase_13_5c/candidate_manifest.json",
+          "outputs/phase_13_5c/CONTRACT_ECONOMICS_QA.json"
+        ]
+      },
+      "reliability_policy_fingerprint": {
+        "equals_phase_13_5c_committed_value": true,
+        "kind": "INHERITED UNCHANGED from Phase 13/13.5C",
+        "module": "alpha_agent.ml.adjudication.phase_15_reliability_policy"
+      },
+      "risk_identity": {
+        "kind": "Phase 13.5C risk plane, unchanged (PassThroughRiskManager)",
+        "source_artifacts": [
+          "data/manifests/phase_13_5c/candidate_manifest.json"
+        ]
+      },
+      "validation_spec_fingerprint": {
+        "kind": "NEW in Phase 15A.3: the family-wide Phase 15 MLValidationSpec",
+        "module": "alpha_agent.ml.adjudication.build_phase_15_validation_spec"
+      }
+    },
+    "schema_version": "ml-identity-planes/1"
+  },
+  "no_gate_chosen_from_ml_performance": true,
+  "no_real_model_trained": true,
+  "phase": "15A.3",
+  "reliability_gate_sources": {
+    "cross_market_max_root_share": "INHERITED: frozen Phase 13 default 0.9",
+    "dsr_min": "INHERITED: frozen Phase 13 default 0.95; Phase 15 restates no DSR threshold",
+    "fdr_q_threshold": "PROTOCOL: multiple_testing.bh_q = 0.10 (configs/phase_15_ml.yaml s.10, manifest multiple_testing_family). Equals the inherited Phase 13 default, checked.",
+    "fdr_require_canonical_rejected": "INHERITED: frozen Phase 13 default True",
+    "fold_consistency_min": "INHERITED: frozen Phase 13 default 0.5, evaluated over the five predeclared nested-CV outer test blocks (2020-2024)",
+    "max_cost_degradation": "INHERITED: frozen Phase 13 default 0.5, applied to the 1.5x / 2.0x reruns of the unchanged Phase 13.5C cost plan that Phase 15 explicitly inherits (protocol s.10)",
+    "minimum_sample": "INHERITED: frozen Phase 13 MinimumSampleRequirements (60 OOS trading days / 20 fills / 10 trades / 3 folds / 20 non-zero return days). Phase 15's own event gates (min_train_events=100, min_test_events=20) are SPLIT gates and live in NestedCVSpec; they are a different quantity and neither replaces the other.",
+    "null_p_value_max": "INHERITED: frozen Phase 13 default 0.05; Phase 15 restates no alpha",
+    "param_stability_min_fraction_positive_sharpe": "INHERITED: frozen Phase 13 default 0.6. Not exercised in Phase 15 -- the frozen compute budget produces no per-hyperparameter-point OOS economics -- but kept at the inherited value so no threshold is ever invented after the fact.",
+    "param_stability_reject_isolated_spike": "INHERITED: frozen Phase 13 default True",
+    "policy_name": "COSMETIC: excluded from ReliabilityPolicy.identity() by construction",
+    "regime_max_pnl_share": "INHERITED: frozen Phase 13 default 0.9",
+    "require_ablation_mechanism_value": "INHERITED: frozen Phase 13 default False; the Phase 15 regime ablation is its own predeclared BH trial, never an ablation gate on another trial",
+    "require_cross_market": "INHERITED: frozen Phase 13 default False; the protocol declares cross-root summaries descriptive and out of the BH denominator (s.11)",
+    "require_positive_oos_net_pnl": "INHERITED: frozen Phase 13 default True",
+    "require_regime_stability": "INHERITED: frozen Phase 13 default False -- regime evidence is descriptive, as in Phase 13.5C. The Phase 15 regime ABLATION is a separate BH trial, not a gate.",
+    "schema_version": "INHERITED: reliability-policy/1, the frozen Phase 13 schema"
+  },
+  "reliability_policy": {
+    "cross_market_max_root_share": 0.9,
+    "dsr_min": 0.95,
+    "fdr_q_threshold": 0.1,
+    "fdr_require_canonical_rejected": true,
+    "fold_consistency_min": 0.5,
+    "max_cost_degradation": 0.5,
+    "minimum_sample": {
+      "min_fills": 20,
+      "min_nonzero_return_days": 20,
+      "min_oos_trading_days": 60,
+      "min_trades": 10,
+      "min_walk_forward_folds": 3
+    },
+    "null_p_value_max": 0.05,
+    "param_stability_min_fraction_positive_sharpe": 0.6,
+    "param_stability_reject_isolated_spike": true,
+    "policy_name": "phase_15_ml",
+    "regime_max_pnl_share": 0.9,
+    "require_ablation_mechanism_value": false,
+    "require_cross_market": false,
+    "require_positive_oos_net_pnl": true,
+    "require_regime_stability": false,
+    "schema_version": "reliability-policy/1"
+  },
+  "reliability_policy_fingerprint": "valreliabilitypolicy1:b0682e86917c7b84550dc4d578926b8724fc95e18edb035242241ea008ec3705",
+  "status": "VALIDATION_ADJUDICATION_PLANE_FROZEN",
+  "validation_plane_fingerprint": "p15valplane1:a4bfc2ef1009bf1dacac5a569d9c0a93f50b1ccfa9e71aa036cf1b7642380016",
+  "validation_spec": {
+    "baseline_comparison": {
+      "alignment": "identical row timestamps, root, strategy fingerprint, warm-up and absent-row policy; only target values differ",
+      "baseline_arm_label": "PRIMARY",
+      "baseline_cost_scenario_label": "baseline_1_0x",
+      "delta_vs_primary_is_gated": false,
+      "reported_metrics": [
+        "net_pnl_usd",
+        "daily_sharpe",
+        "n_trades",
+        "n_fills",
+        "turnover",
+        "cost_stress",
+        "max_drawdown_usd",
+        "take_rate",
+        "economic_delta_vs_primary"
+      ],
+      "schema_version": "ml-baseline-comparison/1",
+      "stress_cost_scenario_labels": [
+        "stress_1_5x",
+        "stress_2_0x"
+      ],
+      "treatment_arm_label": "META_LABELED"
+    },
+    "bootstrap": {
+      "ci_level": 0.95,
+      "mean_block_length": 20,
+      "method": "stationary",
+      "n_resamples": 2000,
+      "seed": 0
+    },
+    "capital_base_usd": 100000.0,
+    "cost_stress": {
+      "base_commission_per_contract_usd": 2.0,
+      "base_slippage_ticks": 0.0,
+      "base_spread_ticks": 0.0,
+      "scenarios": [
+        {
+          "commission_per_contract_usd": null,
+          "kind": "multiplier",
+          "label": "baseline_1_0x",
+          "multiplier": 1.0,
+          "slippage_ticks": null,
+          "spread_ticks": null
+        },
+        {
+          "commission_per_contract_usd": null,
+          "kind": "multiplier",
+          "label": "stress_1_5x",
+          "multiplier": 1.5,
+          "slippage_ticks": null,
+          "spread_ticks": null
+        },
+        {
+          "commission_per_contract_usd": null,
+          "kind": "multiplier",
+          "label": "stress_2_0x",
+          "multiplier": 2.0,
+          "slippage_ticks": null,
+          "spread_ticks": null
+        }
+      ],
+      "schema_version": "cost-stress/1"
+    },
+    "development_corpus_end_ts_ns": 1735689600000000000,
+    "development_corpus_start_ts_ns": 1514764800000000000,
+    "fold_evidence_source": "nested_cv_outer_test_blocks",
+    "framework_version": "reliability-validation/1",
+    "hyperparameter_plateau_evidence": "diagnostic_inner_objective_only",
+    "label": "phase_15_ml_meta_labeling",
+    "locked_final_holdout_accessed": false,
+    "locked_final_holdout_start_ts_ns": 1735689600000000000,
+    "minimum_sample": {
+      "min_fills": 20,
+      "min_nonzero_return_days": 20,
+      "min_oos_trading_days": 60,
+      "min_trades": 10,
+      "min_walk_forward_folds": 3
+    },
+    "ml_diagnostics": [
+      "roc_auc",
+      "pr_auc",
+      "log_loss",
+      "brier",
+      "calibration_curve",
+      "precision",
+      "recall",
+      "class_balance",
+      "prediction_coverage",
+      "take_rate"
+    ],
+    "ml_diagnostics_gate_verdict": false,
+    "multiple_testing": {
+      "bh_q": 0.1,
+      "cross_root_summaries_in_denominator": false,
+      "diagnostic_reruns_in_denominator": false,
+      "dsr_effective_trial_count": 380,
+      "dsr_effective_trial_count_by_model_family": {
+        "HIST_GRADIENT_BOOSTING": 8,
+        "LOGISTIC_L2": 3
+      },
+      "family_id": "phase_15_ml.all",
+      "n_ablation_trials": 20,
+      "n_headline_trials": 40,
+      "n_trials": 60,
+      "phase_13_5c_n_trials_unchanged": 107,
+      "phase_13_5c_trials_folded_in": false,
+      "placebo_in_denominator": false,
+      "schema_version": "ml-multiple-testing-plan/1"
+    },
+    "nested_cv": {
+      "corpus_end_ts_ns": 1735689600000000000,
+      "corpus_start_ts_ns": 1514764800000000000,
+      "embargo_days": 10,
+      "min_test_events": 20,
+      "min_train_days": 365,
+      "min_train_events": 100,
+      "n_inner_folds": 3,
+      "outer_test_blocks": [
+        [
+          1577836800000000000,
+          1609459200000000000
+        ],
+        [
+          1609459200000000000,
+          1640995200000000000
+        ],
+        [
+          1640995200000000000,
+          1672531200000000000
+        ],
+        [
+          1672531200000000000,
+          1704067200000000000
+        ],
+        [
+          1704067200000000000,
+          1735689600000000000
+        ]
+      ],
+      "schema_version": "ml-nested-cv/1"
+    },
+    "null_test": {
+      "block_length": 20,
+      "execution_latency_bars": 0,
+      "gap_multiple": 1.5,
+      "max_shift_bars": 10,
+      "methods": [
+        "centered_block_bootstrap"
+      ],
+      "min_shift_bars": 2,
+      "n_null_samples": 199,
+      "seed": 0,
+      "statistic": "daily_sharpe"
+    },
+    "parameter_stability_gate_applies": false,
+    "placebo": {
+      "cost_scenario_label": "baseline_1_0x",
+      "draws": 20,
+      "executed_by": "cpp_quant_core",
+      "in_bh_denominator": false,
+      "matched_on": "realised_take_rate",
+      "policy": "conditional_on_gating_null_rejection",
+      "schema_version": "ml-placebo-plan/1"
+    },
+    "reliability_policy_fingerprint": "valreliabilitypolicy1:b0682e86917c7b84550dc4d578926b8724fc95e18edb035242241ea008ec3705",
+    "schema_version": "ml-validation-spec/1",
+    "take_threshold": 0.5
+  },
+  "validation_spec_fingerprint": "mlvalidationspec1:bfbd460ce9cc1c3b6a7c1ec06d376033e3fa230504b9d3920d90ed5e6eb2807a"
+}

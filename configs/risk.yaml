@@ -1,0 +1,36 @@
+# Hard risk configuration (Phase 08). These map 1:1 to quant::RiskConfig.
+# CLAUDE.md risk rule 1: these limits are deterministic and an LLM can never
+# override them. 0 (or a non-positive value) disables a limit, except the
+# position caps which keep protective defaults.
+risk:
+  paper_only: true            # MVP invariant: historical research + paper trading only
+  llm_can_override: false
+
+  # position limits -- counted on the POST-trade position
+  max_contracts_per_symbol: 5     # |units| in one raw contract
+  max_contracts_per_root: 10      # |sum of units| across a root (ES, NQ, CL, GC, ZN)
+  max_gross_contracts: 20         # sum |units| across the whole portfolio
+  max_order_contracts: 0          # per-order quantity ceiling; 0 == disabled
+
+  # exposure / leverage -- ContractSpec economics (price x multiplier x contracts)
+  max_gross_exposure_usd: 0.0     # 0 == disabled
+  max_gross_leverage: 0.0         # gross_exposure / equity; 0 == disabled
+  max_net_leverage: 0.0           # |net_exposure| / equity; 0 == disabled
+
+  # margin
+  max_margin_utilization_pct: 0.50   # initial_margin / equity; 0 == disabled
+  missing_margin_policy: reject       # reject | treat_as_zero -- NEVER guessed from notional
+  margin_model_csv: configs/margin.csv
+
+  # loss / drawdown kill switches (REJECT-only, never RESIZE)
+  max_daily_loss_usd: 1500           # trip when (day_start_equity - equity) >= this
+  max_portfolio_drawdown_pct: 0.10   # trip when drawdown_pct >= this
+  max_portfolio_drawdown_usd: 0.0    # absolute variant; 0 == disabled
+
+  # stale-mark protection (requirement 7)
+  stale_mark_policy: reject_risk_increasing   # reject_risk_increasing | ignore
+
+  # portfolio valuation
+  starting_capital_usd: 100000
+  mark_staleness_tolerance_ns: 0     # set to the bar cadence / max session gap upstream
+  day_boundary_offset_ns: 0          # 0 == UTC midnight; set to the CME 17:00 CT reset upstream

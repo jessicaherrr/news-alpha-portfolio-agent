@@ -1,0 +1,67 @@
+# Phase 13.5C -- real-market research + validation.
+#
+# HUMAN-READABLE MIRROR of the frozen constants in
+# python/alpha_agent/strategy/candidates_phase_13_5c.py and the 13.5C driver.
+# The authoritative, hashed record is
+# data/manifests/phase_13_5c/candidate_manifest.json (committed before any
+# real-market performance). Editing this file does NOT change the frozen
+# manifest -- regenerate it with `python scripts/phase_13_5c_research.py --freeze`.
+
+phase: "13.5C"
+
+roots: [ES, NQ, CL, GC, ZN]
+
+windows:                                   # end-exclusive; configs/real_dataset.yaml plan B
+  research:   {start: "2018-01-01", end: "2023-01-01", role: TRAIN}
+  validation: {start: "2023-01-01", end: "2025-01-01", role: VALIDATION}
+  locked_holdout: {start: "2025-01-01", end: "2026-01-01", role: LOCKED_HOLDOUT, downloaded: false}
+
+# headline OOS = the VALIDATION window (ValidationEngine oos_split_role=VALIDATION);
+# walk-forward folds are built inside TRAIN only.
+walk_forward: {n_folds: 4, scheme: expanding, min_train_days: 365, test_days: 180, embargo_days: 5}
+
+signal_cadence:
+  tsmom: daily_trading_day
+  ma_trend: daily_trading_day
+  breakout: daily_trading_day
+  mean_reversion: daily_trading_day
+  silver_bullet: native_1m
+execution_cadence: native_1m_raw_contract   # ALL families
+
+# canonical parameters -- textbook, frozen BEFORE performance. Baseline
+# horizons/windows are in TRADING DAYS.
+canonical_params:
+  tsmom:          {fast_horizon: 20, slow_horizon: 120, size: 1}
+  ma_trend:       {fast_window: 50, slow_window: 200, size: 1}
+  breakout:       {lookback: 55, size: 1}
+  mean_reversion: {zscore_window: 20, entry_z: 2.0, exit_z: 0.5, size: 1}
+  silver_bullet:  SILVER_BULLET_BENCHMARK        # Phase 12/12.1, NQ only, unchanged
+
+silver_bullet_roots:
+  evaluated: [NQ]
+  not_evaluated: [ES, CL, GC, ZN]
+  not_evaluated_reason: benchmark_not_predeclared_for_root
+
+# execution / risk / cost assumptions actually used by the driver
+execution:
+  bars: native 1-minute RAW_CONTRACT (layer 2)
+  commission_per_contract_usd: 2.0
+  slippage_ticks: 0.0
+  spread_ticks: 0.0
+  latency_bars: 0
+risk:
+  risk_manager: PassThroughRiskManager         # cpp/apps/backtest_targets_csv.cpp -- TRUTHFUL
+  hard_risk_limits_enforced: false             # Phase 08 limits deferred to Phase 19
+cost_scenarios: [1.0x, 1.5x, 2.0x]             # frozen Phase 13 cost_stress; C++ reruns
+
+null_tests:
+  centered_block_bootstrap: GATING
+  schedule_time_shift: DIAGNOSTIC              # never gates PASS/REJECT (Phase 13.2)
+
+multiple_testing:
+  family_id: phase_13_5c.all                   # BH/FDR over: canonical + neighbours + cross-market roots
+  data_quality_sensitivity_in_denominator: false   # robustness of the same hypothesis, not a trial
+
+degraded_vendor_dates: ["2020-02-27", "2020-07-01", "2021-12-05", "2022-01-02", "2024-09-18"]
+
+holdout: NEVER downloaded, queried, cost-fetched, featured, selected on, or reported in Phase 13.5C

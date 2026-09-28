@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agentic-alpha"
+version = "0.2.0"
+description = "Agentic Alpha -- an Agentic Quant Research Environment; Python AI research layer for a hybrid C++/Python multi-asset research platform (today's implemented universe is futures)"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26",
+  "pandas>=2.1",
+  "pydantic>=2.6",
+  "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "ruff>=0.6",
+  # Phase 19: build-time only, for the optional pybind11 fast boundary
+  # (bindings/pybind_module.cpp -> quant_core_py). Not a runtime dependency of
+  # the quant core; scripts/build_pybind.sh resolves its CMake dir.
+  "pybind11>=2.12",
+]
+data = [
+  "databento",
+  "pyarrow>=15",
+  "python-dotenv>=1.0",
+  "httpx>=0.27",
+]
+ui = [
+  "streamlit>=1.38",
+  "plotly>=5.24",
+]
+ai = [
+  "anthropic",
+]
+# Phase 15A.1: the APPROVED Phase 15 ML stack. Two research model families --
+# one linear probabilistic model and one controlled nonlinear tree
+# (HistGradientBoostingClassifier, which ships with scikit-learn). LightGBM,
+# XGBoost, CatBoost and Optuna are deliberately absent: keeping the model zoo
+# small before any Phase 15 result exists is statistical control, and
+# alpha_agent.ml.models.assert_no_forbidden_ml_packages fails loudly if one
+# appears.
+ml = [
+  "scikit-learn>=1.5",
+  "scipy>=1.11",
+]
+# Release UX -- optional, read-only, DELAYED-only IBKR TWS API market
+# context (alpha_agent.marketdata). Not required to import that package or
+# run the test suite (lazily imported inside IBKRDelayedMarketDataProvider.
+# connect()); needed only to actually connect to a locally-running Trader
+# Workstation / IB Gateway. No credentials, no order routing -- see
+# alpha_agent/marketdata/__init__.py.
+ibkr = [
+  "ibapi",
+]
+
+[tool.setuptools]
+package-dir = {"" = "python"}
+
+[tool.setuptools.packages.find]
+where = ["python"]
+
+[tool.pytest.ini_options]
+pythonpath = ["python"]
+testpaths = ["tests/python"]
+markers = [
+    "slow: exercises the real C++ backtest path over the full acquired dataset (seconds-to-minutes; still zero network/data cost). Deselect with `-m 'not slow'` for a fast local loop.",
+    "real_databento_context: opts out of tests/python/conftest.py's repo-wide NOT_CONNECTED default mock for alpha_agent.ui.databento_context -- reserved for test_databento_ui_context.py, which tests that module's own delegation/degradation behavior.",
+]
+
+[tool.ruff]
+line-length = 100

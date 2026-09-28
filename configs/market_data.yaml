@@ -1,0 +1,15 @@
+# Release UX -- optional, read-only, DELAYED market-data context (IBKR TWS
+# API). Disabled by default: this repository's test suite and any fresh
+# clone must never attempt a network/socket connection. No credentials
+# belong in this file -- IBKR authentication happens entirely inside a
+# locally-running Trader Workstation / IB Gateway; this only says where to
+# find it. Set enabled: true locally once TWS/IB Gateway is running with API
+# access enabled, on the port that instance listens on (7497 is TWS's
+# default paper-trading-mode socket port; adjust to your own setup).
+
+enabled: false
+host: 127.0.0.1
+port: 7497
+client_id: 42
+connect_timeout_seconds: 1.5
+request_timeout_seconds: 3.0

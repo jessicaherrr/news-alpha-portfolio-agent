@@ -1,0 +1,30 @@
+{
+  "calendar_identity": "2026-09-phase04",
+  "canonicalization_version": "1.0",
+  "code_commit": "06ac9db",
+  "component_kind": "roll_overlap_raw_ohlcv1m",
+  "contract_definition_identity": "defs:c168f9173e16fb72",
+  "databento_schema": "ohlcv-1m",
+  "dataset": "GLBX.MDP3",
+  "download_cost_usd": 0.053827166557,
+  "downloaded_at": "2026-09-08T06:46:15.539496+00:00",
+  "end": "2022-09-27",
+  "ingestion_version": "databento-source/1",
+  "price_domain": "raw_contract",
+  "query_identity": "dbnq1:b9d403ec842c7c0b5aa32591",
+  "raw_artifact_relpath": "data/raw/databento/GLBX.MDP3/ohlcv-1m/29acb79212f2c0b3/ohlcv-1m.dbn.zst",
+  "raw_or_continuous_role": "roll_overlap_raw",
+  "raw_sha256": "0af86e21d081e1f4396371740e183099d2ee3705a99af1e777cf5fecc24fcb79",
+  "root_symbol": "CL",
+  "row_count": 14744,
+  "schema_version": "real-dataset/1",
+  "split_role": "research",
+  "start": "2022-09-15",
+  "stype_in": "raw_symbol",
+  "stype_out": "instrument_id",
+  "symbol_request": [
+    "CLV2",
+    "CLX2"
+  ],
+  "vendor": "databento"
+}

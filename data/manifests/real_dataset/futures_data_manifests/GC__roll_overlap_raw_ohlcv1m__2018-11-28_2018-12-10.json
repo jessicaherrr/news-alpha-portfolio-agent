@@ -1,0 +1,30 @@
+{
+  "calendar_identity": "2026-09-phase04",
+  "canonicalization_version": "1.0",
+  "code_commit": "06ac9db",
+  "component_kind": "roll_overlap_raw_ohlcv1m",
+  "contract_definition_identity": "defs:4ed28002bbfa49a6",
+  "databento_schema": "ohlcv-1m",
+  "dataset": "GLBX.MDP3",
+  "download_cost_usd": 0.050829872489,
+  "downloaded_at": "2026-09-08T06:46:56.645963+00:00",
+  "end": "2018-12-10",
+  "ingestion_version": "databento-source/1",
+  "price_domain": "raw_contract",
+  "query_identity": "dbnq1:8dcaf385e10516f29260d14b",
+  "raw_artifact_relpath": "data/raw/databento/GLBX.MDP3/ohlcv-1m/1b1f9e4a6a1dd5e6/ohlcv-1m.dbn.zst",
+  "raw_or_continuous_role": "roll_overlap_raw",
+  "raw_sha256": "eb6d6c06e3e20030d46e0eff00f81bed2554ae450a4fe4587ef65e14e88ff313",
+  "root_symbol": "GC",
+  "row_count": 13923,
+  "schema_version": "real-dataset/1",
+  "split_role": "research",
+  "start": "2018-11-28",
+  "stype_in": "raw_symbol",
+  "stype_out": "instrument_id",
+  "symbol_request": [
+    "GCG9",
+    "GCZ8"
+  ],
+  "vendor": "databento"
+}

@@ -1,0 +1,29 @@
+{
+  "calendar_identity": "2026-09-phase04",
+  "canonicalization_version": "1.0",
+  "code_commit": "06ac9db",
+  "component_kind": "instrument_definitions",
+  "contract_definition_identity": "defs:d321ab62003628a9",
+  "databento_schema": "definition",
+  "dataset": "GLBX.MDP3",
+  "download_cost_usd": 5.5983663e-05,
+  "downloaded_at": "2026-09-08T06:47:36.935439+00:00",
+  "end": "2018-07-05",
+  "ingestion_version": "databento-source/1",
+  "price_domain": "n/a",
+  "query_identity": "dbnq1:40a5958ca419433313ece1e6",
+  "raw_artifact_relpath": "data/raw/databento/GLBX.MDP3/definition/68ced48e3bbe9fc8/definition.dbn.zst",
+  "raw_or_continuous_role": "definitions",
+  "raw_sha256": "18a703ef81de099c7b6144935c10b6c1b214331715e3f3935efcee528e74fd72",
+  "root_symbol": "ZN",
+  "row_count": 68,
+  "schema_version": "real-dataset/1",
+  "split_role": "research",
+  "start": "2018-07-01",
+  "stype_in": "parent",
+  "stype_out": "instrument_id",
+  "symbol_request": [
+    "ZN.FUT"
+  ],
+  "vendor": "databento"
+}

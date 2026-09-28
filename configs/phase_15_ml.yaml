@@ -1,0 +1,528 @@
+# Phase 15 -- ML meta-labeling + regime research protocol.
+#
+# HUMAN-READABLE MIRROR of the frozen constants in python/alpha_agent/ml/.
+# The authoritative, hashed records are
+# data/manifests/phase_15/ml_candidate_manifest_identity_corrected.json (candidate
+# manifest, 15A.2) and data/manifests/phase_15/ml_validation_plane_adjudication_corrected.json
+# (validation / adjudication plane + the six identity planes, 15A.3), both
+# committed BEFORE any ML performance is observed. Editing this file does NOT
+# change either -- regenerate them with
+# `python scripts/phase_15a2_identity_correction.py` then
+# `python scripts/phase_15a3_validation_freeze.py` then
+# `python scripts/phase_15b_adjudication_freeze.py`.
+
+phase: "15B.1"
+status: EXECUTION_LAYER_BUILT  # 15B.0 planes frozen; whole DAG proven on synthetic fixtures
+execution_layer:
+  runner: alpha_agent.ml.phase_15b_runner
+  cli: scripts/phase_15b_research.py  # --preflight / --estimate-only / --synthetic-integration / --run-real
+  frozen_semantics_changed: none  # 15B.1 adds only execution code
+  real_run: Phase 15B.2 -- a mechanical --run-real invocation; not yet run; no 2025
+  integration_record: outputs/phase_15/PRE_REAL_RUN_INTEGRATION_REPORT.json
+
+superseded_validation_plane_15a3:
+  fingerprint: "mlvalidationspec1:bfbd460ce9cc1c3b6a7c1ec06d376033e3fa230504b9d3920d90ed5e6eb2807a"
+  path: data/manifests/phase_15/ml_validation_plane.json
+  commits: [f7d421d, 0289f37]
+  status: SUPERSEDED for Phase 15B adjudication-semantics purposes
+  preserved: unchanged on disk and in git history; never amended, never deleted
+  reason: >-
+    PRE-RUN ADJUDICATION SEMANTICS. Phase 15B freezes two Phase-15-specific rules
+    on top of the inherited Phase 13 ReliabilityPolicy (which is NOT modified):
+    (1) the predeclared BH family is always exactly 60 -- a typed refusal/failure
+    never drops a trial, it enters at the conservative p=1 and its real refusal is
+    preserved in the registry; (2) a Phase 15 PASS must demonstrate the ML filter
+    ADDS VALUE -- meta daily Sharpe > primary daily Sharpe on exactly aligned
+    support AND the predeclared 20-draw TAKE-rate-matched placebo empirical
+    p = (1 + #{placebo >= observed})/(20+1) <= 0.05, daily Sharpe the comparison
+    statistic; the placebo stays a control, never a BH hypothesis. MLValidationSpec
+    changed, so its fingerprint, the validation_spec_fingerprint identity plane and
+    all 60 pre-run experiment_identity values moved. Frozen BEFORE any real market
+    data, event corpus or model fit.
+
+superseded_manifest_15a1:
+  fingerprint: "p15manifest1:82983cf4f04e101520bb882ddca9aed9dd779565a646e3f4a70c68b352897975"
+  path: data/manifests/phase_15/ml_candidate_manifest_corrected.json
+  commits: [0bb6014, c375399]
+  status: SUPERSEDED for Phase 15 experiment-identity purposes
+  preserved: unchanged on disk and in git history; never amended, never deleted
+  reason: >-
+    PRE-RUN EXPERIMENT-IDENTITY SEMANTICS. Phase 15A/15A.1 keyed the ML experiment
+    identity on ONE concrete MLModelSpec hyperparameter point. Nested CV selects
+    the point inside each outer TRAINING fold, so it does not exist before the run
+    and different folds may select different ones: identity was not computable
+    pre-run, it named a configuration the protocol never uniquely produces, and it
+    would have split each of the 60 predeclared economic hypotheses into H
+    registry-facing identities (380 for 60), disagreeing with its own BH/FDR
+    denominator. The whole predeclared model-search PROCEDURE is now the identity
+    input; selected hyperparameters are post-fit provenance. No count changed.
+    Corrected BEFORE any real ML training.
+
+superseded_manifest:
+  fingerprint: "p15manifest1:3c28e6431deb7c5b66848ec1c6f15ad791d56c153488cf3c57b50de5ac5d537d"
+  path: data/manifests/phase_15/ml_candidate_manifest.json
+  commits: [72d714b, 7234b7a]
+  status: SUPERSEDED for Phase 15 training-protocol purposes
+  preserved: unchanged on disk and in git history; never amended, never deleted
+  reason: >-
+    THRESHOLD-SELECTION SEMANTICS. Phase 15A declared a four-point TAKE-threshold
+    grid selected inside the inner CV loop, while the inner objective was mean
+    inner-fold log loss -- a probability-based score that is independent of the
+    decision threshold. All four thresholds therefore scored identically and the
+    "selection" resolved through a deterministic tie-break, so the threshold was
+    never actually selected by CV, while still multiplying the DSR search-breadth
+    term by four. Corrected BEFORE any real ML performance was observed.
+
+# --------------------------------------------------------------------------
+# 1. Data roles -- Phase 15's OWN truthful roles
+# --------------------------------------------------------------------------
+# Phase 13's history is unchanged (2018-2022 RESEARCH, 2023-2024 VALIDATION,
+# 2025 LOCKED HOLDOUT). But Phase 15 is a NEW research program created AFTER
+# Phase 13's results were observed, so 2023-2024 is NOT an untouched OOS set
+# for it and is never described as one.
+data_roles:
+  PHASE_15_DEVELOPMENT_CORPUS: {start: "2018-01-01", end: "2025-01-01"}   # end-exclusive
+  LOCKED_FINAL_HOLDOUT:        {start: "2025-01-01", downloaded: false}
+holdout: >-
+  2025 is NEVER downloaded, queried, cost-fetched, loaded, featured, labelled,
+  trained on, scored or inspected. Any code path touching ts >= 2025-01-01
+  raises HoldoutAccessError.
+
+# --------------------------------------------------------------------------
+# 2. Primary event generators
+# --------------------------------------------------------------------------
+# The Phase 13.5C deterministic strategies become PRIMARY EVENT GENERATORS.
+# None of them has validated alpha: Phase 13.5C returned 0 PASS / 19 REJECT /
+# 2 INCONCLUSIVE over 107 hypotheses. Phase 15 asks a NEW question.
+primary_families: [tsmom, ma_trend, breakout, mean_reversion]
+roots: [ES, NQ, CL, GC, ZN]
+primary_not_evaluated:
+  silver_bullet:
+    reason: native_1m_cadence_needs_its_own_label_horizon
+    note: >-
+      A frozen native-1m NQ hypothesis. Intraday episodes mean a different label
+      horizon, purge/embargo scale and event density; meta-labeling it is a
+      separate predeclared family for a later phase.
+
+# --------------------------------------------------------------------------
+# 3. Meta-label
+# --------------------------------------------------------------------------
+meta_label:
+  action_space: [TAKE, SKIP]        # CLOSED. A probability never becomes size.
+  take: preserve the primary strategy's own target for the whole episode
+  skip: rewrite the episode's rows to the neutral target 0
+  decisions_per_episode: 1          # decided at entry; no mid-episode re-decision
+  label_kind: PRIMARY_EPISODE_NET_PNL_SIGN
+  positive_threshold_usd: 0.0       # label 1 iff net_pnl_usd > 0.0 (strictly)
+  episode_definition: >-
+    A maximal run of one signed target direction in the primary TargetSchedule.
+    Opens on a sign change to non-zero; closes at the first later row of a
+    different sign; a same-sign size change does not open a new episode.
+  outcome_source: >-
+    C++ Fill-derived. gross from ClosedTrade.gross_pnl_usd, costs from the FULL
+    round-turn commission summed over the fill audit trail (ClosedTrade.costs_usd
+    carries the CLOSING fill's commission only). Python sums; it never prices.
+  cost_attribution: >-
+    PER CONTRACT. A fill's per-contract rate is commission_usd / quantity; the
+    contracts that CLOSED exposure belong to the episode owning the resulting
+    ClosedTrade, and every remaining contract OPENED exposure and belongs to the
+    episode open at that instant. A LONG -> SHORT flip is one two-contract fill,
+    so its commission splits one contract each way. Roll-maintenance fills stay
+    in the SAME primary episode -- a roll never creates a synthetic episode.
+  reconciliation: >-
+    sum(episode gross) - sum(episode-attributed commissions) == C++
+    BacktestResult net_pnl_usd, within numerical tolerance. An unterminated final
+    episode is reported separately (closed labelled vs excluded/open economics)
+    and must explain the difference exactly. Nothing is silently dropped.
+  excluded_episodes:
+    UNTERMINATED_AT_CORPUS_END: outcome not observable inside the corpus
+    NO_ATTRIBUTED_FILLS: the decision produced no fill, so it has no outcome
+    FEATURES_MISSING_AT_DECISION: a declared feature was absent at the decision bar
+  causal_invariant: feature_timestamp <= decision_timestamp < label_start <= label_end
+
+# --------------------------------------------------------------------------
+# 4. Feature universe -- typed FeatureSpecs only
+# --------------------------------------------------------------------------
+feature_set:
+  label: phase_15_mvp_causal_v1
+  price_domain: back_adjusted       # signal-safe, point-in-time; never a fill price
+  ordered_features:                 # ORDER IS SEMANTIC (model matrix column order)
+    - {alias: mom_20,               kind: cum_log_return, params: {window: 20}}
+    - {alias: mom_120,              kind: cum_log_return, params: {window: 120}}
+    - {alias: rvol_20,              kind: realized_vol,   params: {window: 20}}
+    - {alias: rvol_60,              kind: realized_vol,   params: {window: 60}}
+    - {alias: atr_14,               kind: atr,            params: {window: 14}}
+    - {alias: zscore_20,            kind: zscore,         params: {window: 20}}
+    - {alias: dist_ma_50,           kind: dist_from_ma,   params: {window: 50}}
+    - {alias: donchian_pos_55,      kind: donchian_pos,   params: {window: 55}}
+    - {alias: trend_strength_50_200, kind: trend_strength, params: {fast: 50, slow: 200}}
+    - {alias: vol_percentile_20_252, kind: vol_percentile, params: {window: 20, lookback: 252}}
+    - {alias: volume_zscore_20,     kind: volume_zscore,  params: {window: 20}}
+  categoricals: [root_symbol, primary_side]
+  excluded:
+    carry_term_structure: >-
+      alpha_agent.features.carry is a separate curve API, not a registered
+      FeatureSpec kind, and the acquired Plan-B dataset has no point-in-time
+      deferred-contract curve for every root. Permitted only where PIT-safe curve
+      data supports it; here it does not.
+    execution_plane_fields: never a feature, however convenient
+
+# --------------------------------------------------------------------------
+# 4b. Model input allowlist -- the model may consume only decision-time fields
+# --------------------------------------------------------------------------
+model_input_allowlist:
+  policy: ALLOWLIST                 # not blacklist-only: an unforeseen column fails closed
+  permitted: the ordered feature aliases above, plus [root_symbol, primary_side]
+  refused_examples: [label, episode_net_pnl_usd, episode_duration_ns, exit_timestamp,
+                     n_attributed_fills, n_roll_closes, mae_usd, mfe_usd, realised_regime]
+  rule: the label may look forward; the features may not
+
+# --------------------------------------------------------------------------
+# 5. Regime
+# --------------------------------------------------------------------------
+regime:
+  # FROZEN Phase 15B.1b -- one predeclared deterministic transformation, NOT
+  # nine hypotheses. Bound in full into RegimeSpec.identity(); superseded the
+  # 15B.1 raw row-wise-mean implementation (see REGIME_SEMANTIC_SUPERSESSION).
+  baseline:                         # concept A -- deterministic, causal, REFERENCE
+    kind: DETERMINISTIC_CAUSAL_VOL_TREND
+    algorithm: independent_axis_tertiles_cartesian_product/1
+    inputs: [realized_vol(window=20), trend_strength(fast=50, slow=200)]
+    axis_bucket_count: 3            # per axis
+    quantile_probs: [0.3333333333333333, 0.6666666666666666]
+    quantile_scope: current TRAIN fold only, linear interpolation
+    combination: >-
+      each input is bucketed INDEPENDENTLY on its own scale into empirical
+      tertiles (NO standardise-and-average, NO PCA / clustering / performance
+      tuning); axis 0 = realized_vol -> LOW / MID / HIGH; axis 1 = signed
+      trend_strength -> BEARISH / NEUTRAL / BULLISH. regime = Cartesian product,
+      axis-0-major (state = vol_bucket * 3 + trend_bucket) -> 9 states.
+    output: 9 deterministic one-hot columns regime_state_0 .. regime_state_8
+    missing_inputs: >-
+      a missing / non-finite regime input follows the typed feature-exclusion
+      semantics (FEATURES_MISSING_AT_DECISION) -- never imputed to zero.
+  ablation: {kind: NONE}            # a BH trial in its own right -- 20 identities unchanged by 15B.1b
+
+# --------------------------------------------------------------------------
+# 6. Model families + FROZEN grid (no AutoML, no Optuna, no adaptive expansion)
+# --------------------------------------------------------------------------
+model_families:
+  LOGISTIC_L2:
+    backend: sklearn.linear_model.LogisticRegression (penalty=l2, solver=lbfgs)
+    grid: [{C: 0.1}, {C: 1.0}, {C: 10.0}]
+  HIST_GRADIENT_BOOSTING:
+    backend: sklearn.ensemble.HistGradientBoostingClassifier (early_stopping=False)
+    grid:
+      - {max_depth: 2, learning_rate: 0.05, max_iter: 100}
+      - {max_depth: 2, learning_rate: 0.05, max_iter: 300}
+      - {max_depth: 2, learning_rate: 0.10, max_iter: 100}
+      - {max_depth: 2, learning_rate: 0.10, max_iter: 300}
+      - {max_depth: 3, learning_rate: 0.05, max_iter: 100}
+      - {max_depth: 3, learning_rate: 0.05, max_iter: 300}
+      - {max_depth: 3, learning_rate: 0.10, max_iter: 100}
+      - {max_depth: 3, learning_rate: 0.10, max_iter: 300}
+# The model-side unit of a hypothesis is the SEARCH PROCEDURE, not a point.
+model_search:
+  identity_unit: predeclared_model_search_procedure
+  components: [model_family, full frozen grid in declaration order,
+               selection_objective, selection_tie_break, random_seed]
+  random_seed: 20250101
+  n_configurations: {LOGISTIC_L2: 3, HIST_GRADIENT_BOOSTING: 8}
+  grid_is_frozen: >-
+    ModelSearchSpec refuses any grid that is not the frozen one, in declaration
+    order. The order IS the tie-break rule, so reordering it is a different search
+    procedure and therefore a different experiment.
+  selected_hyperparameters: POST-FIT PROVENANCE ONLY -- never identity
+  note: >-
+    Under nested CV a hyperparameter point is selected inside each outer TRAINING
+    fold, so no point exists pre-run and different folds may select different
+    ones. What a trial claims is about the predeclared search, so the search is
+    identity and the selection is evidence about it. run_nested_cv refuses to
+    execute a search whose objective or seed disagrees with the declared one, and
+    assert_selection_is_within_search refuses a fold that reports a configuration
+    the procedure could not reach.
+
+# The TAKE threshold is a FROZEN decision rule, NOT a search dimension.
+take_threshold: 0.50
+threshold_is_searched: false
+decision_rule: "probability_take >= 0.50 -> TAKE; probability_take < 0.50 -> SKIP"
+threshold_note: >-
+  A probability never becomes continuous position size. Thresholds such as 0.55 /
+  0.60 may return only as explicitly predeclared decision-policy hypotheses in a
+  NEW search family -- never as a free parameter of this one, and never chosen on
+  PnL. The inner objective stays log loss; it is never replaced by an economic
+  objective.
+no_neural_network: true
+model_zoo_expansion: >-
+  FORBIDDEN before any Phase 15 result exists. Two families -- one simple linear
+  probabilistic model and one controlled nonlinear tree -- is deliberate
+  statistical control, not a claim that other models are bad.
+environment_2026_09_09:             # one-time approved install; versions are provenance
+  python: "3.12.14"
+  numpy: "2.5.2"
+  pandas: "3.0.5"
+  scipy: "1.18.1"
+  scikit-learn: "1.9.0"
+forbidden_packages: [lightgbm, xgboost, catboost, optuna, tensorflow, torch]
+forbidden_packages_note: >-
+  Not installed and not used. HistGradientBoostingClassifier ships with
+  scikit-learn and is the frozen nonlinear tree baseline. Installing any of the
+  above needs network access and explicit human approval.
+
+# --------------------------------------------------------------------------
+# 7. Nested chronological validation
+# --------------------------------------------------------------------------
+nested_cv:
+  random_split: FORBIDDEN           # refuse_random_split() is a hard tripwire
+  outer_test_blocks: ["2020", "2021", "2022", "2023", "2024"]   # calendar years
+  outer_scheme: expanding_origin
+  n_inner_folds: 3
+  inner_scheme: expanding_origin inside the outer TRAIN window only
+  embargo_days: 10
+  min_train_days: 365
+  min_train_events: 100             # FROZEN. Below this the scope is REFUSED,
+  min_test_events: 20               # with a typed INSUFFICIENT_TRAIN_EVENTS /
+                                    # INSUFFICIENT_TEST_EVENTS outcome. Never
+                                    # lowered after real counts are seen.
+  purge: >-
+    drop a training event whose LABEL WINDOW [label_start, label_end] overlaps
+    the test block. The horizon is the episode's last C++ fill close, which can
+    be months after the decision -- purging on the decision timestamp alone would
+    leave exactly the leakage that matters.
+  embargo: >-
+    additionally drop a training event whose label window falls inside a buffer
+    around the test block (shared vol state, a shared roll, a straddled shock).
+  preprocessing_fit_scope: inner/outer TRAIN fold only; never whole-dataset
+  inner_objective: mean_inner_fold_log_loss_minimised   # never economics
+  inner_selection_dimensions: [model_hyperparameter_configuration]   # ONLY this
+  inner_tie_break: frozen grid declaration order (first wins) -- predeclared
+  pooled_root_isolation: >-
+    Training is pooled across ES/NQ/CL/GC/ZN with root as a categorical feature.
+    Every outer/inner temporal boundary applies GLOBALLY: at a given test block NO
+    root contributes events from that test/future period to training. Asserted per
+    root by assert_global_temporal_isolation, not assumed from the construction.
+
+# --------------------------------------------------------------------------
+# 8. Metrics
+# --------------------------------------------------------------------------
+ml_diagnostics: [roc_auc, pr_auc, log_loss, brier, calibration_curve,
+                 precision, recall, class_balance, prediction_coverage, take_rate]
+plain_accuracy_optimised: false
+economic_question: >-
+  Does the meta-labeled strategy improve the deterministic primary under the SAME
+  C++ execution/accounting semantics? ML metrics are diagnostic only; improvement
+  is never claimed from classification metrics.
+
+# --------------------------------------------------------------------------
+# 9. Economic evaluation -- official numbers stay C++ Fill-derived
+# --------------------------------------------------------------------------
+economics:
+  path: OOF predictions -> closed TAKE/SKIP TargetSchedule -> C++ Quant Core ->
+        Fill-derived PnL -> Reliability Validation -> Experiment Registry
+  comparison: PRIMARY vs META-LABELED on exactly aligned evaluation support
+  alignment: identical row timestamps, root, fingerprint, warm-up, schedule policy
+  reported: [net_pnl_usd, daily_sharpe, n_trades, n_fills, turnover, cost_stress,
+             max_drawdown_usd, take_rate, economic_delta_vs_primary]
+  cost_scenarios: [1.0x, 1.5x, 2.0x]      # frozen Phase 13.5C plan, unchanged
+  execution/risk/cost planes: inherited UNCHANGED from Phase 13.5C
+
+# --------------------------------------------------------------------------
+# 10. Multiple testing -- a SEPARATE family
+# --------------------------------------------------------------------------
+multiple_testing:
+  family_id: phase_15_ml.all
+  n_trials: 60                      # 40 headline + 20 regime ablation
+  bh_q: 0.10
+  dsr_effective_trial_count: 380    # inspected model configurations (see below)
+  dsr_effective_trial_count_by_model_family: {LOGISTIC_L2: 3, HIST_GRADIENT_BOOSTING: 8}
+  dsr_effective_trial_count_superseded: 7600
+  phase_13_5c_trials_folded_in: false
+  phase_13_5c_n_trials_unchanged: 107
+  placebo_in_denominator: false
+  cross_root_summaries_in_denominator: false
+  diagnostic_reruns_in_denominator: false
+  note: >-
+    BH counts the out-of-sample economic results actually inspected. DSR uses the
+    inspected-CONFIGURATION count, because DSR is the tool that deflates for
+    search breadth. The corrected count is 380 = sum over the 60 trials of the
+    frozen hyperparameter points its inner loop chooses among (20x3 + 20x8 +
+    20x8). The superseded 7,600 was 20x too large: x4 for a threshold sweep the
+    threshold-independent inner objective could never distinguish, and x5 for
+    counting each outer fold's refit of the SAME configuration as a separate
+    inspected configuration. A repeated fit of one configuration on another CV
+    fold is a TRAINING operation, not a new model hypothesis.
+  full_derivation: outputs/phase_15/PRETRAIN_TRIAL_ACCOUNTING.json
+
+# --------------------------------------------------------------------------
+# 11. Registry
+# --------------------------------------------------------------------------
+registry:
+  path: data/registry/experiments.sqlite      # the EXISTING one; no ML registry
+  schema_version: 4
+  identity_schema: experiment-identity/2
+  pre_run_order: [construct identity, find_exact_duplicate, find_related /
+                  FailureMemory, refuse silent reruns, append after evaluation]
+  identity_inputs: [ml_composite_fingerprint (primary + full pipeline),
+                    ml_meta_label.<family>, root,
+                    "model-SEARCH-procedure + frozen threshold variant",
+                    dataset, nested_cv split, ValidationSpec, ReliabilityPolicy,
+                    execution/cost/risk config, ML feature-set fingerprint]
+  post_run_provenance_not_identity: [target_schedule_hash, report_fingerprint,
+                                     selected outer-fold hyperparameters,
+                                     per-fold selected model / artifact fingerprint,
+                                     inner objective values]
+  n_pre_run_experiment_identities: 60      # == the BH/FDR denominator, by construction
+  identities_per_predeclared_hypothesis: 1
+  identity_map: outputs/phase_15/PRERUN_IDENTITY_MAP_COMPLETE_ADJUDICATION_CORRECTED.json  # 15B.0
+  identity_map_15a3: outputs/phase_15/PRERUN_IDENTITY_MAP_COMPLETE.json   # 15A.3, preserved
+  identity_map_15a2: outputs/phase_15/PRETRAIN_IDENTITY_MAP.json     # discriminators only
+  trial_to_spec: alpha_agent.ml.trials.experiment_spec_for_trial
+  planes_supplied_explicitly: >-
+    MLIdentityPlanes has no defaults. The six plane fingerprints are passed in by
+    the caller; an unknown plane means the identity is not yet claimable, never a
+    fabricated value. assert_planes_are_real refuses a placeholder outright.
+  preflight: outputs/phase_15/PRERUN_REGISTRY_PREFLIGHT_ADJUDICATION_CORRECTED.json  # 15B.0
+  preflight_result: 60 queried, 0 exact duplicates, clear_to_run true, before any fit
+
+# --------------------------------------------------------------------------
+# 11b. Identity planes (Phase 15A.3) -- all six real, none invented
+# --------------------------------------------------------------------------
+identity_planes:
+  artifact: outputs/phase_15/PHASE_15_IDENTITY_PLANES.json
+  dataset_fingerprint:
+    value: "mldatasetplane1:95716bd0928cae7947bc0cde51a96c10aadd1cb50373177cb50826d487e4b910"
+    source: >-
+      POOLED over the five roots' committed Phase 13.5C dataset identities. A Phase
+      15 pipeline trains ONE model over ES/NQ/CL/GC/ZN with root as a categorical
+      feature, so the data the hypothesis is about is all five roots' bars. Phase
+      13.5C execution bars span the development corpus exactly, so each per-root
+      identity is Phase 13.5C's unchanged; no bar was re-hashed and no new data
+      exists. All four baseline families' reports are read per root and a
+      disagreement raises.
+  validation_spec_fingerprint:
+    value: "mlvalidationspec1:08a4413d74430b8c0ae722d3fcf437be4f709f5a0de4ac5ba4d515709e3dbc28"
+    source: >-
+      Phase 15B: the family-wide Phase 15 MLValidationSpec (schema ml-validation-spec/2),
+      carrying the two Phase-15-specific adjudication rules. Supersedes the 15A.3
+      value mlvalidationspec1:bfbd460c... (schema /1), preserved on disk and in git.
+  reliability_policy_fingerprint:
+    value: "valreliabilitypolicy1:b0682e86917c7b84550dc4d578926b8724fc95e18edb035242241ea008ec3705"
+    source: INHERITED UNCHANGED from Phase 13/13.5C -- the same fingerprint recorded
+            in all 21 committed Phase 13.5C validation reports
+  execution_config_identity:
+    value: "execconfig1:5b89fcc1038c02d7171e856a8da737af39830fd2d7a94c70f40dae7c51359fbc"
+    source: Phase 13.5C corrected execution plane, unchanged
+  cost_config_identity:
+    value: "costconfig1:7ad0adc13a84045cfde2d02fe55115c52b0aa4ee79ecf8942b1b947fcdf6e7fd"
+    source: Phase 13.5C cost plane, unchanged
+  risk_identity:
+    value: "riskconfig1:a24167a3fccbf206eec000ee1abf8d2cb3db1f30520064a26e3e332ed128ef55"
+    source: Phase 13.5C risk plane, unchanged (PassThroughRiskManager)
+
+# --------------------------------------------------------------------------
+# 11c. Validation / adjudication plane (Phase 15A.3)
+# --------------------------------------------------------------------------
+# EVERY gate below is either restated by this protocol or INHERITED UNCHANGED from
+# the frozen Phase 13 default that section 0 says Phase 15 does not replace.
+# Nothing was chosen from ML performance -- no model has been fitted, so there is
+# none to choose from. That is why the plane is frozen NOW.
+validation_plane:
+  manifest: data/manifests/phase_15/ml_validation_plane_adjudication_corrected.json
+  manifest_15a3: data/manifests/phase_15/ml_validation_plane.json   # preserved
+  module: alpha_agent.ml.adjudication
+  freeze_script: scripts/phase_15b_adjudication_freeze.py  # supersedes phase_15a3_validation_freeze.py
+  validation_spec_schema: ml-validation-spec/1
+  scope: FAMILY-WIDE -- one spec for all 60 trials, so the six identity planes are
+         genuinely shared and the 15A.2 uniqueness proof carries over
+  capital_base_usd: 100000.0            # inherited unchanged from Phase 13.5C
+  fold_evidence_source: nested_cv_outer_test_blocks   # Phase 15 has no Phase 13 walk-forward
+  null_plan:
+    methods: [centered_block_bootstrap]  # the GATING null, and nothing else
+    n_null_samples: 199
+    block_length: 20
+    seed: 0
+    excluded: [schedule_time_shift, circular_schedule_permutation]
+    exclusion_reason: >-
+      A schedule-based null reruns the C++ engine once per replicate. Section 15
+      declares one null "requiring no extra C++ runs" and section 14 budgets 240
+      C++ evaluations; including a schedule null would need order 12,000 more runs
+      and contradict the frozen accounting.
+      assert_null_plan_fits_frozen_compute_budget enforces the link.
+  reliability_policy:
+    inherited_unchanged_from: phase_13_5c
+    fdr_q_threshold: 0.10               # PROTOCOL (section 10 bh_q); checked to AGREE
+    null_p_value_max: 0.05              # inherited Phase 13 default
+    dsr_min: 0.95                       # inherited Phase 13 default
+    max_cost_degradation: 0.5           # inherited; read off the 1.5x / 2.0x reruns
+    fold_consistency_min: 0.5           # inherited; over the five outer test blocks
+    require_positive_oos_net_pnl: true  # inherited
+    minimum_sample: {min_oos_trading_days: 60, min_fills: 20, min_trades: 10,
+                     min_walk_forward_folds: 3, min_nonzero_return_days: 20}
+    require_regime_stability: false     # inherited; regime evidence stays descriptive
+    require_cross_market: false         # inherited; cross-root summaries are descriptive
+    require_ablation_mechanism_value: false  # the regime ablation is its own BH trial
+    gate_provenance: RELIABILITY_GATE_SOURCES names the origin of EVERY field; an
+                     unsourced gate fails closed
+  baseline_comparison:
+    baseline_arm: PRIMARY
+    treatment_arm: META_LABELED
+    baseline_cost_scenario: baseline_1_0x
+    stress_cost_scenarios: [stress_1_5x, stress_2_0x]
+    delta_vs_primary_is_gated: false
+    delta_note: >-
+      Section 9 REPORTS economic_delta_vs_primary and declares no PASS/REJECT
+      threshold for it. Gating on it would be an invented rule, and
+      MLBaselineComparisonPlan refuses to be constructed that way.
+  hyperparameter_plateau_evidence: diagnostic_inner_objective_only
+  parameter_stability_gate_applies: false
+  parameter_stability_note: >-
+    The frozen budget evaluates economics for the SELECTED pipeline only (60
+    primary + 180 meta-labeled), so no per-hyperparameter-point out-of-sample
+    economics exist to build a Phase 13 ParameterStabilityResult from, and section
+    16 step 8 declares no threshold for a plateau gate. Recorded as a diagnostic and
+    gating on nothing. The policy's param_stability_* values are left at their
+    inherited Phase 13 values so that if such evidence is ever produced it is judged
+    by a threshold nobody invented after the fact. An ECONOMIC plateau gate is a NEW
+    frozen research semantic requiring approval -- see docs section 17 limitation 10.
+  ml_diagnostics_gate_verdict: false    # classification metrics are diagnostic only
+
+  # Phase 15B -- two Phase-15-specific adjudication rules, layered on the
+  # inherited Phase 13 ReliabilityPolicy WITHOUT modifying it. Frozen before any
+  # real event corpus, model fit or ML performance.
+  phase_15b_adjudication_rules:
+    freeze_script: scripts/phase_15b_adjudication_freeze.py
+    manifest: data/manifests/phase_15/ml_validation_plane_adjudication_corrected.json
+    core_phase_13_reliability_policy_modified: false
+    # Rule 1 -- the predeclared BH family is ALWAYS exactly 60 hypotheses.
+    bh_family_size: 60
+    family_size_is_fixed: true
+    refused_trial_bh_p_value: 1.0
+    refused_trial_note: >-
+      A trial that a typed refusal/failure keeps from producing a valid
+      statistical result is never silently dropped from the family: it enters BH
+      accounting at the conservative p = 1 (never significant) and its actual
+      typed refusal/failure is preserved in the registry.
+    # Rule 2 -- a Phase 15 PASS must demonstrate the ML filter ADDS VALUE.
+    require_meta_beats_primary_daily_sharpe: true
+    meta_vs_primary_sharpe_support: exactly_aligned
+    placebo_draws: 20
+    placebo_comparison_statistic: daily_sharpe
+    placebo_empirical_p_formula: "(1 + count(placebo_stat >= observed_stat)) / (draws + 1)"
+    placebo_empirical_p_max: 0.05
+    placebo_remains_a_control_not_a_bh_hypothesis: true
+    pass_gate_note: >-
+      On top of the inherited ReliabilityPolicy PASS, a Phase 15 trial must show
+      meta daily Sharpe > primary daily Sharpe on exactly aligned support AND the
+      predeclared 20-draw TAKE-rate-matched placebo must satisfy empirical
+      p <= 0.05. This separates "the filter chose well" from "the filtered
+      strategy is merely profitable standalone" / "the model simply traded less".
+
+# --------------------------------------------------------------------------
+# 12. Placebo / nulls
+# --------------------------------------------------------------------------
+nulls:
+  gating: centered_block_bootstrap on the meta-labeled OOS daily net returns
+  placebo: random meta-labeler matched on the realised TAKE rate
+  placebo_draws: 20
+  placebo_policy: conditional_on_gating_null_rejection
+  placebo_expected_count: near zero given the Phase 13.5C prior (0 PASS in 107)
